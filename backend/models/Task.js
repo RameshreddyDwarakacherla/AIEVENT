@@ -1,0 +1,57 @@
+import mongoose from 'mongoose';
+
+const taskSchema = new mongoose.Schema({
+  eventId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event',
+    required: true
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  category: {
+    type: String,
+    enum: ['venue', 'catering', 'decoration', 'entertainment', 'logistics', 'invitations', 'photography', 'other'],
+    default: 'other'
+  },
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high', 'urgent'],
+    default: 'medium'
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'in-progress', 'completed', 'cancelled'],
+    default: 'pending'
+  },
+  dueDate: {
+    type: Date
+  },
+  completedAt: {
+    type: Date
+  },
+  assignedTo: {
+    type: String,
+    trim: true
+  }
+}, {
+  timestamps: true
+});
+
+taskSchema.index({ eventId: 1, status: 1 });
+taskSchema.index({ userId: 1, status: 1 });
+
+const Task = mongoose.model('Task', taskSchema);
+
+export default Task;

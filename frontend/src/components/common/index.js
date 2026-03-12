@@ -1,0 +1,17 @@
+// Export all common components for easy importing
+export { default as AnimatedCounter } from './AnimatedCounter';
+export { default as NewsletterSignup } from './NewsletterSignup';
+export { default as LoadingSkeleton, CardSkeleton, TableSkeleton, DashboardSkeleton } from './LoadingSkeleton';
+export { default as SEO } from './SEO';
+export { default as Breadcrumbs } from './Breadcrumbs';
+export { default as ConfirmDialog } from './ConfirmDialog';
+export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as SearchBar } from './SearchBar';
+export { default as EmptyState } from './EmptyState';
+export { default as ImageUpload } from './ImageUpload';
+export { default as ProgressStepper } from './ProgressStepper';
+export { default as StatCard } from './StatCard';
+export { default as DataTable } from './DataTable';
+export { default as QuickActions } from './QuickActions';
+export { default as NotificationBadge } from './NotificationBadge';
+export { default as FilterPanel } from './FilterPanel';
