@@ -199,7 +199,7 @@ AIEVENT/
    ```
 
 6. **Access the application**
-   - Frontend: http://localhost:5174
+   - Frontend: http://localhost:5173
    - Backend API: http://localhost:5000
 
 ## 📝 API Endpoints
