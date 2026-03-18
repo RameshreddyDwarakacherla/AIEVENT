@@ -270,88 +270,256 @@ const VendorBookingsPage = () => {
                   <Grid item xs={12} md={6} key={booking.id}>
                     <Box
                       sx={{
-                        ...glass, background: 'rgba(255,255,255,0.02)', p: 3,
-                        transition: 'all 0.3s ease',
-                        animation: 'fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both',
-                        '@keyframes fadeInUp': { from: { opacity: 0, transform: 'translateY(20px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
-                        '&:hover': { background: 'rgba(255,255,255,0.04)', borderColor: '#8B5CF650' }
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08))',
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '24px',
+                        p: 4,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        animation: `fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s both`,
+                        '@keyframes fadeInUp': { 
+                          from: { opacity: 0, transform: 'translateY(30px)' }, 
+                          to: { opacity: 1, transform: 'translateY(0)' } 
+                        },
+                        '&:hover': { 
+                          transform: 'translateY(-8px) scale(1.02)',
+                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12))',
+                          borderColor: 'rgba(139, 92, 246, 0.4)',
+                          boxShadow: '0 20px 40px rgba(139, 92, 246, 0.2)'
+                        },
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '4px',
+                          background: `linear-gradient(90deg, ${getStatusColor(booking.status)}, ${getStatusColor(booking.status)}80)`,
+                          borderRadius: '24px 24px 0 0'
+                        }
                       }}
                     >
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                        <Box>
-                          <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', color: 'white', mb: 0.5 }}>{booking.eventName}</Typography>
-                          <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>{booking.service}</Typography>
+                      {/* Header Section */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography 
+                            sx={{ 
+                              fontWeight: 900, 
+                              fontSize: '1.3rem', 
+                              color: 'white', 
+                              mb: 0.5,
+                              textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                            }}
+                          >
+                            {booking.eventName}
+                          </Typography>
+                          <Typography 
+                            sx={{ 
+                              color: 'rgba(255,255,255,0.8)', 
+                              fontSize: '0.95rem',
+                              fontWeight: 600
+                            }}
+                          >
+                            {booking.service}
+                          </Typography>
                         </Box>
                         <Chip 
-                          label={booking.status} 
+                          label={booking.status.toUpperCase()} 
                           size="small"
                           sx={{ 
-                            background: `${getStatusColor(booking.status)}15`, 
+                            background: `${getStatusColor(booking.status)}25`, 
                             color: getStatusColor(booking.status),
-                            fontWeight: 800, border: `1px solid ${getStatusColor(booking.status)}25`,
-                            textTransform: 'uppercase', fontSize: '10px'
+                            fontWeight: 900, 
+                            border: `2px solid ${getStatusColor(booking.status)}50`,
+                            textTransform: 'uppercase', 
+                            fontSize: '11px',
+                            letterSpacing: '0.5px',
+                            px: 1.5,
+                            py: 0.5,
+                            boxShadow: `0 4px 12px ${getStatusColor(booking.status)}30`
                           }} 
                         />
                       </Box>
 
-                      <Grid container spacing={2} sx={{ mb: 3 }}>
+                      {/* Client and Amount Info */}
+                      <Grid container spacing={3} sx={{ mb: 3 }}>
                         <Grid item xs={6}>
-                          <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-                            <Avatar sx={{ width: 32, height: 32, background: 'rgba(139, 92, 246, 0.1)', color: '#8B5CF6' }}>
-                              <PersonIcon fontSize="small" />
+                          <Box sx={{ 
+                            display: 'flex', 
+                            gap: 2, 
+                            alignItems: 'center',
+                            p: 2,
+                            background: 'rgba(255, 255, 255, 0.08)',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(255, 255, 255, 0.1)'
+                          }}>
+                            <Avatar sx={{ 
+                              width: 40, 
+                              height: 40, 
+                              background: 'linear-gradient(135deg, #8B5CF6, #EC4899)', 
+                              color: 'white',
+                              fontWeight: 900,
+                              fontSize: '1.1rem'
+                            }}>
+                              {booking.clientName.charAt(0)}
                             </Avatar>
                             <Box>
-                              <Typography sx={{ color: 'white', fontWeight: 600, fontSize: '0.9rem' }}>{booking.clientName}</Typography>
-                              <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>Organizer</Typography>
+                              <Typography sx={{ 
+                                color: 'white', 
+                                fontWeight: 700, 
+                                fontSize: '1rem',
+                                textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                              }}>
+                                {booking.clientName}
+                              </Typography>
+                              <Typography sx={{ 
+                                color: 'rgba(255,255,255,0.7)', 
+                                fontSize: '0.8rem',
+                                fontWeight: 600
+                              }}>
+                                Event Organizer
+                              </Typography>
                             </Box>
                           </Box>
                         </Grid>
                         <Grid item xs={6}>
-                          <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-                            <Box sx={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <AttachMoneyIcon fontSize="small" />
+                          <Box sx={{ 
+                            display: 'flex', 
+                            gap: 2, 
+                            alignItems: 'center',
+                            p: 2,
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(16, 185, 129, 0.2)'
+                          }}>
+                            <Box sx={{ 
+                              width: 40, 
+                              height: 40, 
+                              borderRadius: '12px', 
+                              background: 'linear-gradient(135deg, #10B981, #059669)', 
+                              color: 'white', 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                            }}>
+                              <AttachMoneyIcon fontSize="medium" />
                             </Box>
                             <Box>
-                              <Typography sx={{ color: 'white', fontWeight: 600, fontSize: '0.9rem' }}>${booking.amount.toLocaleString()}</Typography>
-                              <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>Estimate</Typography>
+                              <Typography sx={{ 
+                                color: 'white', 
+                                fontWeight: 800, 
+                                fontSize: '1.1rem',
+                                textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                              }}>
+                                ${booking.amount.toLocaleString()}
+                              </Typography>
+                              <Typography sx={{ 
+                                color: 'rgba(255,255,255,0.7)', 
+                                fontSize: '0.8rem',
+                                fontWeight: 600
+                              }}>
+                                Total Value
+                              </Typography>
                             </Box>
                           </Box>
                         </Grid>
                       </Grid>
 
-                      <Box sx={{ p: 2, background: 'rgba(255,255,255,0.02)', borderRadius: '16px', display: 'flex', gap: 3, mb: 3 }}>
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                          <EventIcon sx={{ fontSize: 16, color: 'rgba(255,255,255,0.3)' }} />
-                          <Typography sx={{ fontWeight: 600, fontSize: '0.85rem' }}>{booking.date}</Typography>
+                      {/* Event Details */}
+                      <Box sx={{ 
+                        p: 3, 
+                        background: 'rgba(255,255,255,0.06)', 
+                        borderRadius: '18px', 
+                        display: 'flex', 
+                        gap: 4, 
+                        mb: 3,
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                      }}>
+                        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                          <EventIcon sx={{ fontSize: 20, color: '#8B5CF6' }} />
+                          <Typography sx={{ 
+                            fontWeight: 700, 
+                            fontSize: '0.95rem',
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }}>
+                            {booking.date}
+                          </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                          <GroupIcon sx={{ fontSize: 16, color: 'rgba(255,255,255,0.3)' }} />
-                          <Typography sx={{ fontWeight: 600, fontSize: '0.85rem' }}>{booking.guests} Guests</Typography>
+                        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                          <GroupIcon sx={{ fontSize: 20, color: '#EC4899' }} />
+                          <Typography sx={{ 
+                            fontWeight: 700, 
+                            fontSize: '0.95rem',
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }}>
+                            {booking.guests} Guests
+                          </Typography>
                         </Box>
                       </Box>
 
-                      <Box sx={{ display: 'flex', gap: 1.5 }}>
+                      {/* Action Buttons */}
+                      <Box sx={{ display: 'flex', gap: 2 }}>
                         <Button 
                           fullWidth 
                           onClick={() => handleViewDetails(booking)}
                           sx={{ 
-                            ...glass, background: 'rgba(255,255,255,0.05)', color: 'white', 
-                            textTransform: 'none', fontWeight: 700, borderRadius: '12px', py: 1.2
+                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            color: 'white', 
+                            textTransform: 'none', 
+                            fontWeight: 800, 
+                            borderRadius: '16px', 
+                            py: 1.5,
+                            fontSize: '1rem',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                            '&:hover': {
+                              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15))',
+                              transform: 'translateY(-2px)',
+                              boxShadow: '0 8px 20px rgba(255, 255, 255, 0.1)'
+                            }
                           }}
                         >
-                          Overview
+                          View Overview
                         </Button>
                         {booking.status === 'pending' && (
-                          <Box sx={{ display: 'flex', gap: 1 }}>
+                          <Box sx={{ display: 'flex', gap: 1.5 }}>
                             <IconButton 
                               onClick={() => handleAcceptBooking(booking.id)}
-                              sx={{ background: '#10B98120', color: '#10B981', '&:hover': { background: '#10B981' } }}
+                              sx={{ 
+                                background: 'linear-gradient(135deg, #10B981, #059669)', 
+                                color: 'white',
+                                width: 48,
+                                height: 48,
+                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
+                                '&:hover': { 
+                                  background: 'linear-gradient(135deg, #059669, #047857)',
+                                  transform: 'scale(1.1)',
+                                  boxShadow: '0 6px 16px rgba(16, 185, 129, 0.6)'
+                                }
+                              }}
                             >
                               <CheckCircleIcon />
                             </IconButton>
                             <IconButton 
                               onClick={() => handleRejectBooking(booking.id)}
-                              sx={{ background: '#EF444420', color: '#EF4444', '&:hover': { background: '#EF4444' } }}
+                              sx={{ 
+                                background: 'linear-gradient(135deg, #EF4444, #DC2626)', 
+                                color: 'white',
+                                width: 48,
+                                height: 48,
+                                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.4)',
+                                '&:hover': { 
+                                  background: 'linear-gradient(135deg, #DC2626, #B91C1C)',
+                                  transform: 'scale(1.1)',
+                                  boxShadow: '0 6px 16px rgba(239, 68, 68, 0.6)'
+                                }
+                              }}
                             >
                               <CancelIcon />
                             </IconButton>

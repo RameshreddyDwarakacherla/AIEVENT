@@ -204,52 +204,387 @@ const MyBookingsPage = () => {
             {filteredBookings.map((booking, index) => (
               <Grid item xs={12} md={6} lg={4} key={booking.id}>
                 <Card sx={{ 
-                  ...glass, height: '100%', transition: 'all 0.3s ease', 
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.05}s both`,
-                  '@keyframes fadeInUp': { from: { opacity: 0, transform: 'translateY(20px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
-                  '&:hover': { transform: 'translateY(-6px)', borderColor: '#8B5CF650', background: 'rgba(255,255,255,0.06)' }
+                  background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08))',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '28px',
+                  height: '100%',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  animation: `slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s both`,
+                  '@keyframes slideInUp': { 
+                    from: { opacity: 0, transform: 'translateY(40px) scale(0.95)' }, 
+                    to: { opacity: 1, transform: 'translateY(0) scale(1)' } 
+                  },
+                  '&:hover': { 
+                    transform: 'translateY(-12px) scale(1.02)',
+                    borderColor: 'rgba(139, 92, 246, 0.5)',
+                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12))',
+                    boxShadow: '0 25px 50px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.1)',
+                    '& .status-glow': {
+                      opacity: 1,
+                      transform: 'scale(1.1)'
+                    },
+                    '& .card-content': {
+                      transform: 'translateY(-2px)'
+                    },
+                    '& .action-buttons': {
+                      transform: 'translateY(-4px)'
+                    }
+                  },
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '6px',
+                    background: `linear-gradient(90deg, ${getStatusColor(booking.status)}, ${getStatusColor(booking.status)}80, ${getStatusColor(booking.status)}40)`,
+                    borderRadius: '28px 28px 0 0'
+                  },
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: -2,
+                    left: -2,
+                    right: -2,
+                    bottom: -2,
+                    background: `linear-gradient(45deg, ${getStatusColor(booking.status)}20, transparent, ${getStatusColor(booking.status)}10)`,
+                    borderRadius: '30px',
+                    zIndex: -1,
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease'
+                  },
+                  '&:hover::after': {
+                    opacity: 1
+                  }
                 }}>
-                  <CardContent sx={{ p: 4 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                       <Box>
-                         <Typography sx={{ fontWeight: 900, fontSize: '1.2rem', mb: 0.5 }}>{booking.eventName}</Typography>
-                         <Typography sx={{ color: '#8B5CF6', fontWeight: 600, fontSize: '0.85rem' }}>{booking.service}</Typography>
-                       </Box>
-                       <Chip 
-                         label={booking.status} 
-                         size="small"
-                         sx={{ background: `${getStatusColor(booking.status)}15`, color: getStatusColor(booking.status), fontWeight: 900, fontSize: '10px', textTransform: 'uppercase' }} 
-                       />
+                  <CardContent sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    {/* Header Section with Animation */}
+                    <Box 
+                      className="card-content"
+                      sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'flex-start',
+                        mb: 3,
+                        transition: 'transform 0.3s ease'
+                      }}
+                    >
+                      <Box sx={{ flex: 1, mr: 2 }}>
+                        <Typography sx={{ 
+                          fontWeight: 900, 
+                          fontSize: '1.4rem', 
+                          mb: 0.5,
+                          background: 'linear-gradient(135deg, #ffffff, #e0e0e0)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}>
+                          {booking.eventName}
+                        </Typography>
+                        <Typography sx={{ 
+                          color: '#8B5CF6', 
+                          fontWeight: 700, 
+                          fontSize: '0.95rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px'
+                        }}>
+                          {booking.service}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ position: 'relative' }}>
+                        <Box
+                          className="status-glow"
+                          sx={{
+                            position: 'absolute',
+                            inset: -8,
+                            background: `radial-gradient(circle, ${getStatusColor(booking.status)}30, transparent)`,
+                            borderRadius: '50%',
+                            opacity: 0,
+                            transition: 'all 0.3s ease',
+                            zIndex: 0
+                          }}
+                        />
+                        <Chip 
+                          label={booking.status.toUpperCase()} 
+                          size="small"
+                          sx={{ 
+                            background: `linear-gradient(135deg, ${getStatusColor(booking.status)}25, ${getStatusColor(booking.status)}15)`,
+                            color: getStatusColor(booking.status),
+                            fontWeight: 900, 
+                            fontSize: '11px', 
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px',
+                            border: `2px solid ${getStatusColor(booking.status)}40`,
+                            px: 2,
+                            py: 0.5,
+                            position: 'relative',
+                            zIndex: 1,
+                            boxShadow: `0 4px 12px ${getStatusColor(booking.status)}30`,
+                            '&::before': {
+                              content: '""',
+                              position: 'absolute',
+                              inset: 0,
+                              background: `linear-gradient(135deg, ${getStatusColor(booking.status)}10, transparent)`,
+                              borderRadius: 'inherit',
+                              animation: 'pulse 2s infinite'
+                            },
+                            '@keyframes pulse': {
+                              '0%, 100%': { opacity: 0.5 },
+                              '50%': { opacity: 1 }
+                            }
+                          }} 
+                        />
+                      </Box>
                     </Box>
 
-                    <Box sx={{ mb: 4, p: 2, background: 'rgba(0,0,0,0.2)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <EventIcon sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }} />
-                        <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{booking.date}</Typography>
+                    {/* Enhanced Info Section */}
+                    <Box sx={{ 
+                      mb: 4, 
+                      p: 3, 
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15))',
+                      backdropFilter: 'blur(10px)',
+                      borderRadius: '20px', 
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      gap: 2,
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)'
+                      }
+                    }}>
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 2,
+                        p: 1.5,
+                        borderRadius: '12px',
+                        background: 'rgba(255,255,255,0.05)',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          background: 'rgba(255,255,255,0.1)',
+                          transform: 'translateX(4px)'
+                        }
+                      }}>
+                        <Box sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                        }}>
+                          <EventIcon sx={{ color: 'white', fontSize: 20 }} />
+                        </Box>
+                        <Box>
+                          <Typography sx={{ 
+                            fontWeight: 800, 
+                            fontSize: '1rem',
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          }}>
+                            {booking.date}
+                          </Typography>
+                          <Typography sx={{ 
+                            color: 'rgba(255,255,255,0.6)', 
+                            fontSize: '0.8rem',
+                            fontWeight: 600
+                          }}>
+                            Event Date
+                          </Typography>
+                        </Box>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <PersonIcon sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }} />
-                        <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{booking.vendorName}</Typography>
+
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 2,
+                        p: 1.5,
+                        borderRadius: '12px',
+                        background: 'rgba(255,255,255,0.05)',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          background: 'rgba(255,255,255,0.1)',
+                          transform: 'translateX(4px)'
+                        }
+                      }}>
+                        <Box sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, #3B82F6, #1D4ED8)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                        }}>
+                          <PersonIcon sx={{ color: 'white', fontSize: 20 }} />
+                        </Box>
+                        <Box>
+                          <Typography sx={{ 
+                            fontWeight: 800, 
+                            fontSize: '1rem',
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          }}>
+                            {booking.vendorName}
+                          </Typography>
+                          <Typography sx={{ 
+                            color: 'rgba(255,255,255,0.6)', 
+                            fontSize: '0.8rem',
+                            fontWeight: 600
+                          }}>
+                            Service Provider
+                          </Typography>
+                        </Box>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <AttachMoneyIcon sx={{ color: '#10B981', fontSize: 18 }} />
-                        <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#10B981' }}>${booking.budget?.toLocaleString()}</Typography>
+
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 2,
+                        p: 1.5,
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05))',
+                        border: '1px solid rgba(16, 185, 129, 0.2)',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.1))',
+                          transform: 'translateX(4px)'
+                        }
+                      }}>
+                        <Box sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, #10B981, #059669)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
+                        }}>
+                          <AttachMoneyIcon sx={{ color: 'white', fontSize: 20 }} />
+                        </Box>
+                        <Box>
+                          <Typography sx={{ 
+                            fontWeight: 900, 
+                            fontSize: '1.2rem',
+                            color: '#10B981',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          }}>
+                            ${booking.budget?.toLocaleString()}
+                          </Typography>
+                          <Typography sx={{ 
+                            color: 'rgba(255,255,255,0.6)', 
+                            fontSize: '0.8rem',
+                            fontWeight: 600
+                          }}>
+                            Total Investment
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
 
-                    <Box sx={{ display: 'flex', gap: 1.5 }}>
+                    {/* Enhanced Action Buttons */}
+                    <Box 
+                      className="action-buttons"
+                      sx={{ 
+                        display: 'flex', 
+                        gap: 2, 
+                        mt: 'auto',
+                        transition: 'transform 0.3s ease'
+                      }}
+                    >
                       <Button 
-                        fullWidth onClick={() => handleViewDetails(booking)}
-                        sx={{ ...glass, background: 'rgba(255,255,255,0.05)', color: 'white', textTransform: 'none', fontWeight: 700, borderRadius: '14px', py: 1.2 }}
+                        fullWidth 
+                        onClick={() => handleViewDetails(booking)}
+                        sx={{ 
+                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))',
+                          backdropFilter: 'blur(10px)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          color: 'white', 
+                          textTransform: 'none', 
+                          fontWeight: 800, 
+                          borderRadius: '16px', 
+                          py: 1.5,
+                          fontSize: '1rem',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          '&::before': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: '-100%',
+                            width: '100%',
+                            height: '100%',
+                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                            transition: 'left 0.5s ease'
+                          },
+                          '&:hover': {
+                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15))',
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.15)',
+                            '&::before': {
+                              left: '100%'
+                            }
+                          }
+                        }}
                       >
-                        Inspect
+                        View Details
                       </Button>
-                      <IconButton onClick={() => handleContactVendor(booking)} sx={{ ...glass, background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6', borderRadius: '14px' }}>
-                        <MessageIcon fontSize="small" />
+                      
+                      <IconButton 
+                        onClick={() => handleContactVendor(booking)} 
+                        sx={{ 
+                          background: 'linear-gradient(135deg, #3B82F6, #1D4ED8)',
+                          color: 'white',
+                          borderRadius: '16px',
+                          width: 56,
+                          height: 56,
+                          boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)',
+                          transition: 'all 0.3s ease',
+                          '&:hover': { 
+                            background: 'linear-gradient(135deg, #1D4ED8, #1E40AF)',
+                            transform: 'scale(1.1) rotate(5deg)',
+                            boxShadow: '0 8px 25px rgba(59, 130, 246, 0.6)'
+                          }
+                        }}
+                      >
+                        <MessageIcon />
                       </IconButton>
+                      
                       {(booking.status === 'pending' || booking.status === 'confirmed') && (
-                        <IconButton onClick={() => handleCancelBooking(booking.id)} sx={{ ...glass, background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', borderRadius: '14px' }}>
-                          <CancelIcon fontSize="small" />
+                        <IconButton 
+                          onClick={() => handleCancelBooking(booking.id)} 
+                          sx={{ 
+                            background: 'linear-gradient(135deg, #EF4444, #DC2626)',
+                            color: 'white',
+                            borderRadius: '16px',
+                            width: 56,
+                            height: 56,
+                            boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)',
+                            transition: 'all 0.3s ease',
+                            '&:hover': { 
+                              background: 'linear-gradient(135deg, #DC2626, #B91C1C)',
+                              transform: 'scale(1.1) rotate(-5deg)',
+                              boxShadow: '0 8px 25px rgba(239, 68, 68, 0.6)'
+                            }
+                          }}
+                        >
+                          <CancelIcon />
                         </IconButton>
                       )}
                     </Box>
