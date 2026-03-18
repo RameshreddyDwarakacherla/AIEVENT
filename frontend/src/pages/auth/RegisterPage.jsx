@@ -60,16 +60,33 @@ const RegisterPage = () => {
     e.preventDefault();
 
     if (!formData.email || !formData.password || !formData.confirmPassword ||
-        !formData.firstName || !formData.lastName) {
-      setError('Please fill in all required fields');
+        !formData.firstName || !formData.lastName || !formData.role) {
+      setError('Please fill in all required fields and select a role');
+      return;
+    }
+    
+    if (formData.firstName.trim().length < 1) {
+      setError('First name is required');
+      return;
+    }
+    
+    if (formData.lastName.trim().length < 1) {
+      setError('Last name is required');
       return;
     }
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    // Check password complexity
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+    if (!passwordRegex.test(formData.password)) {
+      setError('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)');
       return;
     }
 
@@ -110,6 +127,10 @@ const RegisterPage = () => {
       setLoading(false);
       setTimeout(() => setIsSubmitting(false), 2000);
     }
+  };
+
+  const handleRoleChange = (role) => {
+    setFormData({ ...formData, role });
   };
 
   const handleChange = (e) => {
@@ -384,6 +405,51 @@ const RegisterPage = () => {
                     },
                   }}
                 />
+                {/* Password Strength Indicator */}
+                {formData.password && (
+                  <Box sx={{ mt: 1 }}>
+                    <Typography variant="caption" sx={{ color: '#666', mb: 1, display: 'block' }}>
+                      Password Requirements:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      <Chip
+                        size="small"
+                        label="8+ chars"
+                        color={formData.password.length >= 8 ? 'success' : 'default'}
+                        variant={formData.password.length >= 8 ? 'filled' : 'outlined'}
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                      <Chip
+                        size="small"
+                        label="Uppercase"
+                        color={/[A-Z]/.test(formData.password) ? 'success' : 'default'}
+                        variant={/[A-Z]/.test(formData.password) ? 'filled' : 'outlined'}
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                      <Chip
+                        size="small"
+                        label="Lowercase"
+                        color={/[a-z]/.test(formData.password) ? 'success' : 'default'}
+                        variant={/[a-z]/.test(formData.password) ? 'filled' : 'outlined'}
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                      <Chip
+                        size="small"
+                        label="Number"
+                        color={/\d/.test(formData.password) ? 'success' : 'default'}
+                        variant={/\d/.test(formData.password) ? 'filled' : 'outlined'}
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                      <Chip
+                        size="small"
+                        label="Special"
+                        color={/[@$!%*?&]/.test(formData.password) ? 'success' : 'default'}
+                        variant={/[@$!%*?&]/.test(formData.password) ? 'filled' : 'outlined'}
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                    </Box>
+                  </Box>
+                )}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -442,11 +508,16 @@ const RegisterPage = () => {
             </Divider>
 
             <FormControl component="fieldset" fullWidth sx={{ mb: 3 }}>
+              <Box sx={{ mb: 2, textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Selected Role: <strong>{formData.role || 'None'}</strong>
+                </Typography>
+              </Box>
               <RadioGroup
                 row
                 name="role"
                 value={formData.role}
-                onChange={handleChange}
+                onChange={(e) => handleRoleChange(e.target.value)}
                 sx={{ 
                   display: 'flex', 
                   gap: 2,
@@ -469,7 +540,7 @@ const RegisterPage = () => {
                       boxShadow: '0 8px 24px rgba(139, 92, 246, 0.3)',
                     },
                   }}
-                  onClick={() => setFormData({ ...formData, role: 'user' })}
+                  onClick={() => handleRoleChange('user')}
                 >
                   <Box sx={{ textAlign: 'center' }}>
                     <EventIcon sx={{ fontSize: 48, color: '#8B5CF6', mb: 1 }} />
@@ -505,7 +576,7 @@ const RegisterPage = () => {
                       boxShadow: '0 8px 24px rgba(236, 72, 153, 0.3)',
                     },
                   }}
-                  onClick={() => setFormData({ ...formData, role: 'vendor' })}
+                  onClick={() => handleRoleChange('vendor')}
                 >
                   <Box sx={{ textAlign: 'center' }}>
                     <VendorIcon sx={{ fontSize: 48, color: '#EC4899', mb: 1 }} />

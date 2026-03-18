@@ -24,7 +24,8 @@ class APIClient {
       ...options.headers,
     };
 
-    const token = this.getToken();
+    // Always get the latest token from localStorage
+    const token = localStorage.getItem('authToken') || this.token;
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -37,8 +38,23 @@ class APIClient {
     try {
       const response = await fetch(`${API_URL}${endpoint}`, config);
 
-      if (response.status === 401 && endpoint.includes('/auth/me')) {
-        return { data: { session: null, user: null }, error: null };
+      // Handle 401 Unauthorized
+      if (response.status === 401) {
+        // If it's not the /auth/me endpoint, clear token and redirect to login
+        if (!endpoint.includes('/auth/me')) {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userRole');
+          this.token = null;
+          
+          // Redirect to login if not already there
+          if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+          }
+        }
+        
+        if (endpoint.includes('/auth/me')) {
+          return { data: { session: null, user: null }, error: null };
+        }
       }
 
       let data;
@@ -50,6 +66,11 @@ class APIClient {
       }
 
       if (!response.ok) {
+        // Handle validation errors from express-validator
+        if (data.errors && Array.isArray(data.errors)) {
+          const errorMessages = data.errors.map(err => err.msg || err.message).join(', ');
+          throw new Error(errorMessages);
+        }
         throw new Error(data.message || data.error || 'API request failed');
       }
 
@@ -70,6 +91,17 @@ class APIClient {
           method: 'POST',
           body: JSON.stringify(userData),
         });
+        
+        // Store tokens if registration is successful
+        if (response.success && response.data) {
+          if (response.data.accessToken) {
+            this.setToken(response.data.accessToken);
+          }
+          if (response.data.refreshToken) {
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+          }
+        }
+        
         return response;
       } catch (error) {
         return { success: false, error: error.message };
@@ -84,8 +116,13 @@ class APIClient {
         });
 
         if (response.success && response.data) {
-          if (response.data.token) {
-            this.setToken(response.data.token);
+          // Backend returns accessToken, not token
+          if (response.data.accessToken) {
+            this.setToken(response.data.accessToken);
+          }
+          // Also store refresh token if provided
+          if (response.data.refreshToken) {
+            localStorage.setItem('refreshToken', response.data.refreshToken);
           }
           return {
             data: { user: response.data.user },

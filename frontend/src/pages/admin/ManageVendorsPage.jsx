@@ -45,9 +45,9 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PendingIcon from '@mui/icons-material/Pending';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PageContainer } from '../../components/common';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
@@ -354,27 +354,31 @@ const ManageVendorsPage = () => {
   }
 
   return (
-    <Box
-      component={motion.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      sx={{ p: { xs: 2, md: 4 }, background: 'transparent', minHeight: '100vh' }}
-    >
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: 'white' }}>
-          Vendor Management
-        </Typography>
+    <PageContainer
+      title="Vendor Management"
+      actions={
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Chip 
             label={`${vendors.filter(v => v.is_verified).length} Verified`} 
-            sx={{ bgcolor: 'rgba(52, 211, 153, 0.1)', color: '#34D399', fontWeight: 700, border: '1px solid rgba(52, 211, 153, 0.2)' }} 
+            sx={{ 
+              bgcolor: 'rgba(52, 211, 153, 0.1)', 
+              color: '#10B981', 
+              fontWeight: 700, 
+              border: '1px solid rgba(16, 185, 129, 0.3)' 
+            }} 
           />
           <Chip 
             label={`${vendors.filter(v => !v.is_verified).length} Pending`} 
-            sx={{ bgcolor: 'rgba(251, 191, 36, 0.1)', color: '#FBBF24', fontWeight: 700, border: '1px solid rgba(251, 191, 36, 0.2)' }} 
+            sx={{ 
+              bgcolor: 'rgba(245, 158, 11, 0.1)', 
+              color: '#F59E0B', 
+              fontWeight: 700, 
+              border: '1px solid rgba(245, 158, 11, 0.3)' 
+            }} 
           />
         </Box>
-      </Box>
+      }
+    >
 
       {/* Filters and Search */}
       <Box sx={{ mb: 3 }}>
@@ -841,7 +845,7 @@ const ManageVendorsPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </PageContainer>
   );
 };
 

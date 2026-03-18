@@ -44,6 +44,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { PageContainer } from '../../components/common';
 
 const EVENT_STATUSES = ['planning', 'confirmed', 'completed', 'cancelled'];
 
@@ -250,28 +251,28 @@ const ManageEventsPage = () => {
   }
 
   return (
-    <Box
-      component={motion.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      sx={{ p: { xs: 2, md: 4 }, background: 'transparent', minHeight: '100vh' }}
+    <PageContainer
+      title="Event Monitoring"
+      badge={`${events.length} Total Platform Events`}
     >
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: 'white' }}>
-          Event Monitoring
-        </Typography>
-        <Chip 
-          label={`${events.length} Total Platform Events`} 
-          variant="outlined" 
-          sx={{ color: '#10B981', borderColor: 'rgba(16, 185, 129, 0.3)', fontWeight: 700 }} 
-        />
-      </Box>
-
       {/* Filters and Search */}
       <Box sx={{ mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={8}>
-            <Tabs value={tabValue} onChange={handleTabChange} aria-label="event filter tabs">
+            <Tabs 
+              value={tabValue} 
+              onChange={handleTabChange} 
+              aria-label="event filter tabs"
+              sx={{
+                '& .MuiTab-root': {
+                  color: 'text.secondary',
+                  fontWeight: 600,
+                },
+                '& .Mui-selected': {
+                  color: 'primary.main',
+                },
+              }}
+            >
               <Tab label="All Events" />
               <Tab label="Planning" />
               <Tab label="Confirmed" />
@@ -709,7 +710,7 @@ const ManageEventsPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </PageContainer>
   );
 };
 

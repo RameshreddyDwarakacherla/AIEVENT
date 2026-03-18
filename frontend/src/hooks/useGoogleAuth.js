@@ -27,9 +27,12 @@ export const useGoogleAuth = ({ mode = 'login', role = 'user' } = {}) => {
         return; // Stop — do NOT store token or navigate
       }
 
-      if (response.success && response.data?.token) {
-        // Store JWT and update session
-        api.setToken(response.data.token);
+      if (response.success && response.data?.accessToken) {
+        // Store JWT and refresh token
+        api.setToken(response.data.accessToken);
+        if (response.data.refreshToken) {
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+        }
         localStorage.setItem('userRole', response.data.user?.role || role);
 
         await refreshSession();
@@ -41,9 +44,9 @@ export const useGoogleAuth = ({ mode = 'login', role = 'user' } = {}) => {
         // Navigate based on role
         const userRole = response.data.user?.role || role;
         const dashboardPath =
-          userRole === 'vendor' ? '/dashboard/vendor' :
-          userRole === 'admin'  ? '/dashboard/admin'  :
-          '/dashboard/user';
+          userRole === 'vendor' ? '/vendor/dashboard' :
+          userRole === 'admin'  ? '/admin'  :
+          '/user/dashboard';
 
         navigate(dashboardPath, { replace: true });
       } else {

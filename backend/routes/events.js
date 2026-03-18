@@ -52,6 +52,21 @@ router.get('/admin-stats', auth, async (req, res) => {
   try {
     const now = new Date();
     const total = await Event.countDocuments();
+    const active = await Event.countDocuments({ status: { $in: ['confirmed', 'in_progress'] } });
+    const completed = await Event.countDocuments({ status: 'completed' });
+    const planning = await Event.countDocuments({ status: 'planning' });
+    const thisMonth = await Event.countDocuments({ createdAt: { $gte: new Date(now.getFullYear(), now.getMonth(), 1) } });
+    res.json({ success: true, data: { total, active, completed, planning, thisMonth } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Get single event
+router.get('/admin-stats', auth, async (req, res) => {
+  try {
+    const now = new Date();
+    const total = await Event.countDocuments();
     const active = await Event.countDocuments({ status: { $in: ['planning', 'confirmed'] } });
     const completed = await Event.countDocuments({ status: 'completed' });
     const thisMonth = await Event.countDocuments({ createdAt: { $gte: new Date(now.getFullYear(), now.getMonth(), 1) } });

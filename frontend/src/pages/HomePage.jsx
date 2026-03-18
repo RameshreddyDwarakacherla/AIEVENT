@@ -27,10 +27,20 @@ import {
   Groups as GroupsIcon,
   AttachMoney as MoneyIcon
 } from '@mui/icons-material';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { greenTheme } from '../styles/theme';
 
 const HomePage = () => {
   const { user, userRole } = useAuth();
   const navigate = useNavigate();
+  const statsRef = useRef(null);
+  const featuresRef = useRef(null);
+  const benefitsRef = useRef(null);
+  
+  const statsInView = useInView(statsRef, { once: true, threshold: 0.2 });
+  const featuresInView = useInView(featuresRef, { once: true, threshold: 0.1 });
+  const benefitsInView = useInView(benefitsRef, { once: true, threshold: 0.1 });
 
   const handleGetStarted = () => {
     navigate('/register');
@@ -41,10 +51,30 @@ const HomePage = () => {
   };
 
   const stats = [
-    { number: '10,000+', label: 'Events Created', icon: <EventIcon sx={{ fontSize: 48 }} />, color: '#6366F1' },
-    { number: '50,000+', label: 'Happy Users', icon: <PeopleIcon sx={{ fontSize: 48 }} />, color: '#EC4899' },
-    { number: '1,000+', label: 'Trusted Vendors', icon: <StorefrontIcon sx={{ fontSize: 48 }} />, color: '#8B5CF6' },
-    { number: '98%', label: 'Success Rate', icon: <TrendingUpIcon sx={{ fontSize: 48 }} />, color: '#10B981' },
+    { 
+      number: '10,000+', 
+      label: 'Events Created', 
+      icon: <EventIcon sx={{ fontSize: 48 }} />, 
+      color: greenTheme.primary
+    },
+    { 
+      number: '50,000+', 
+      label: 'Happy Users', 
+      icon: <PeopleIcon sx={{ fontSize: 48 }} />, 
+      color: greenTheme.secondary
+    },
+    { 
+      number: '1,000+', 
+      label: 'Trusted Vendors', 
+      icon: <StorefrontIcon sx={{ fontSize: 48 }} />, 
+      color: greenTheme.features.vendor
+    },
+    { 
+      number: '98%', 
+      label: 'Success Rate', 
+      icon: <TrendingUpIcon sx={{ fontSize: 48 }} />, 
+      color: greenTheme.features.budget
+    },
   ];
 
   const features = [
@@ -52,43 +82,43 @@ const HomePage = () => {
       title: 'AI-Powered Planning',
       description: 'Get intelligent recommendations for venues, vendors, and timelines based on your event type, budget, and preferences.',
       icon: <AutoAwesomeIcon sx={{ fontSize: 64 }} />,
-      color: '#6366F1',
-      bgGradient: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)',
+      color: greenTheme.features.ai,
+      bgGradient: greenTheme.bgGradients[0],
     },
     {
       title: 'Vendor Marketplace',
       description: 'Discover and connect with verified vendors. Compare services, read reviews, and book with confidence.',
       icon: <StorefrontIcon sx={{ fontSize: 64 }} />,
-      color: '#8B5CF6',
-      bgGradient: 'linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%)',
+      color: greenTheme.features.vendor,
+      bgGradient: greenTheme.bgGradients[1],
     },
     {
       title: 'Guest Management',
       description: 'Send digital invitations, track RSVPs in real-time, and manage your guest list effortlessly.',
       icon: <PeopleIcon sx={{ fontSize: 64 }} />,
-      color: '#DB2777',
-      gradient: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)',
+      color: greenTheme.features.guest,
+      bgGradient: greenTheme.bgGradients[0],
     },
     {
       title: 'Budget Tracking',
       description: 'Keep your event finances organized with smart budget tools and expense tracking.',
       icon: <MoneyIcon sx={{ fontSize: 64 }} />,
-      color: '#10B981',
-      bgGradient: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+      color: greenTheme.features.budget,
+      bgGradient: greenTheme.bgGradients[1],
     },
     {
       title: 'Timeline Planning',
       description: 'Create detailed timelines and schedules to ensure everything runs smoothly.',
       icon: <CalendarIcon sx={{ fontSize: 64 }} />,
-      color: '#F59E0B',
-      bgGradient: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+      color: greenTheme.features.timeline,
+      bgGradient: greenTheme.bgGradients[0],
     },
     {
       title: 'Team Collaboration',
       description: 'Work together with your team and vendors in one centralized platform.',
       icon: <GroupsIcon sx={{ fontSize: 64 }} />,
-      color: '#3B82F6',
-      bgGradient: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+      color: greenTheme.features.collaboration,
+      bgGradient: greenTheme.bgGradients[1],
     }
   ];
 
@@ -97,253 +127,367 @@ const HomePage = () => {
       icon: <TouchAppIcon sx={{ fontSize: 56 }} />,
       title: 'Easy to Use',
       description: 'Intuitive interface designed for everyone. Get started in minutes with our simple setup process.',
-      color: '#6366F1',
-      bgColor: '#EEF2FF',
+      color: greenTheme.primary,
     },
     {
       icon: <AllInclusiveIcon sx={{ fontSize: 56 }} />,
-      title: 'All-in-One Solution',
-      description: 'Everything you need for event planning in one comprehensive platform.',
-      color: '#8B5CF6',
-      bgColor: '#FAF5FF',
-    },
-    {
-      icon: <StorefrontIcon sx={{ fontSize: 56 }} />,
-      title: 'Verified Vendors',
-      description: 'Connect with trusted, verified vendors who can bring your vision to life.',
-      color: '#EC4899',
-      bgColor: '#FDF2F8',
+      title: 'All-in-One Platform',
+      description: 'Everything you need in one place. No more juggling multiple tools and spreadsheets.',
+      color: greenTheme.secondary,
     },
     {
       icon: <SecurityIcon sx={{ fontSize: 56 }} />,
       title: 'Secure & Reliable',
-      description: 'Your data is protected with enterprise-grade security and 99.9% uptime.',
-      color: '#10B981',
-      bgColor: '#ECFDF5',
+      description: 'Your data is protected with enterprise-grade security. We take privacy seriously.',
+      color: greenTheme.features.vendor,
+    },
+    {
+      icon: <CheckCircleIcon sx={{ fontSize: 56 }} />,
+      title: 'Proven Results',
+      description: 'Join thousands of successful events. Our platform has a 98% satisfaction rate.',
+      color: greenTheme.features.budget,
     }
   ];
 
   return (
-    <Box sx={{ width: '100%', background: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)', minHeight: '100vh' }}>
+    <Box sx={{ 
+      width: '100%', 
+      background: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%)', 
+      minHeight: '100vh',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Animated Background Elements */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          style={{
+            position: 'absolute',
+            width: `${100 + i * 50}px`,
+            height: `${100 + i * 50}px`,
+            borderRadius: '50%',
+            background: `rgba(46, 125, 50, ${0.05 + i * 0.02})`,
+            top: `${10 + i * 15}%`,
+            left: `${5 + i * 15}%`,
+            filter: 'blur(40px)',
+            zIndex: 0,
+          }}
+          animate={{
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 8 + i * 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
       {/* Hero Section */}
       <Box
         sx={{
           pt: { xs: 8, md: 12 },
           pb: { xs: 8, md: 12 },
           position: 'relative',
+          zIndex: 1,
         }}
       >
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', maxWidth: '900px', mx: 'auto' }}>
             {/* Badge */}
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 1,
-                px: 3,
-                py: 1,
-                background: '#2E7D32',
-                color: '#FFFFFF',
-                borderRadius: 50,
-                mb: 4,
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                boxShadow: '0 4px 14px rgba(46,125,50,0.3)',
-              }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <AutoAwesomeIcon sx={{ fontSize: 20 }} />
-              AI-Powered Event Planning Platform
-            </Box>
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  px: 3,
+                  py: 1,
+                  background: 'linear-gradient(135deg, #2E7D32, #388E3C)',
+                  color: '#FFFFFF',
+                  borderRadius: 50,
+                  mb: 4,
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  boxShadow: '0 8px 32px rgba(46,125,50,0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  <AutoAwesomeIcon sx={{ fontSize: 20 }} />
+                </motion.div>
+                AI-Powered Event Planning Platform
+              </Box>
+            </motion.div>
 
             {/* Main Heading */}
-            <Typography
-              variant="h1"
-              sx={{
-                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                fontWeight: 900,
-                mb: 3,
-                lineHeight: 1.2,
-                color: '#1B5E20',
-                letterSpacing: '-0.02em',
-                fontFamily: '"Poppins", "Roboto", sans-serif',
-              }}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Plan Perfect Events
-              <br />
-              with Confidence
-            </Typography>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
+                  fontWeight: 900,
+                  mb: 3,
+                  lineHeight: 1.2,
+                  background: 'linear-gradient(135deg, #1B5E20, #2E7D32, #43A047)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '-0.02em',
+                  fontFamily: '"Poppins", "Roboto", sans-serif',
+                }}
+              >
+                Plan Perfect Events
+                <br />
+                with Confidence
+              </Typography>
+            </motion.div>
 
             {/* Subheading */}
-            <Typography
-              variant="h5"
-              sx={{
-                fontSize: { xs: '1.1rem', md: '1.3rem' },
-                mb: 5,
-                color: '#2E7D32',
-                lineHeight: 1.7,
-                fontWeight: 500,
-                maxWidth: '700px',
-                mx: 'auto',
-                fontFamily: '"Inter", "Roboto", sans-serif',
-              }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Transform your event planning experience with intelligent tools, 
-              seamless vendor connections, and automated management features.
-            </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontSize: { xs: '1.1rem', md: '1.3rem' },
+                  mb: 5,
+                  color: '#2E7D32',
+                  lineHeight: 1.7,
+                  fontWeight: 500,
+                  maxWidth: '700px',
+                  mx: 'auto',
+                  fontFamily: '"Inter", "Roboto", sans-serif',
+                }}
+              >
+                Transform your event planning experience with intelligent tools, 
+                seamless vendor connections, and automated management features.
+              </Typography>
+            </motion.div>
 
             {/* CTA Buttons */}
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={2} 
-              justifyContent="center"
-              sx={{ mb: 4 }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
             >
-              {!user ? (
-                <>
-                  <Button
-                    onClick={handleGetStarted}
-                    variant="contained"
-                    size="large"
-                    endIcon={<ArrowForwardIcon />}
-                    sx={{
-                      background: '#2E7D32',
-                      color: '#FFFFFF',
-                      px: 4,
-                      py: 1.8,
-                      fontSize: '1.1rem',
-                      fontWeight: 700,
-                      borderRadius: 2,
-                      textTransform: 'none',
-                      fontFamily: '"Inter", sans-serif',
-                      boxShadow: '0 4px 14px rgba(46,125,50,0.4)',
-                      '&:hover': {
-                        background: '#1B5E20',
-                        boxShadow: '0 6px 20px rgba(46,125,50,0.5)',
-                      },
-                    }}
+              <Stack 
+                direction={{ xs: 'column', sm: 'row' }} 
+                spacing={2} 
+                justifyContent="center"
+                sx={{ mb: 4 }}
+              >
+                {!user ? (
+                  <>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Button
+                        onClick={handleGetStarted}
+                        variant="contained"
+                        size="large"
+                        endIcon={<ArrowForwardIcon />}
+                        sx={{
+                          background: 'linear-gradient(135deg, #2E7D32, #43A047)',
+                          color: '#FFFFFF',
+                          px: 4,
+                          py: 1.8,
+                          fontSize: '1.1rem',
+                          fontWeight: 700,
+                          borderRadius: 2,
+                          textTransform: 'none',
+                          fontFamily: '"Inter", sans-serif',
+                          boxShadow: '0 8px 32px rgba(46,125,50,0.4)',
+                          '&:hover': {
+                            background: 'linear-gradient(135deg, #1B5E20, #2E7D32)',
+                            boxShadow: '0 12px 40px rgba(46,125,50,0.5)',
+                          },
+                        }}
+                      >
+                        Get Started Free
+                      </Button>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Button
+                        onClick={handleSignIn}
+                        variant="outlined"
+                        size="large"
+                        sx={{
+                          borderColor: '#2E7D32',
+                          color: '#2E7D32',
+                          px: 4,
+                          py: 1.8,
+                          fontSize: '1.1rem',
+                          fontWeight: 700,
+                          borderRadius: 2,
+                          borderWidth: 2,
+                          textTransform: 'none',
+                          fontFamily: '"Inter", sans-serif',
+                          bgcolor: 'rgba(255,255,255,0.8)',
+                          backdropFilter: 'blur(10px)',
+                          '&:hover': {
+                            borderColor: '#1B5E20',
+                            borderWidth: 2,
+                            bgcolor: 'rgba(255,255,255,0.95)',
+                            transform: 'translateY(-2px)',
+                          },
+                        }}
+                      >
+                        Sign In
+                      </Button>
+                    </motion.div>
+                  </>
+                ) : (
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    Get Started Free
-                  </Button>
-                  <Button
-                    onClick={handleSignIn}
-                    variant="outlined"
-                    size="large"
-                    sx={{
-                      borderColor: '#2E7D32',
-                      color: '#2E7D32',
-                      px: 4,
-                      py: 1.8,
-                      fontSize: '1.1rem',
-                      fontWeight: 700,
-                      borderRadius: 2,
-                      borderWidth: 2,
-                      textTransform: 'none',
-                      fontFamily: '"Inter", sans-serif',
-                      bgcolor: 'rgba(255,255,255,0.7)',
-                      '&:hover': {
-                        borderColor: '#1B5E20',
-                        borderWidth: 2,
-                        bgcolor: 'rgba(255,255,255,0.9)',
-                      },
-                    }}
-                  >
-                    Sign In
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  component={Link}
-                  to={`/dashboard/${localStorage.getItem('userRole') || userRole || 'user'}`}
-                  variant="contained"
-                  size="large"
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    background: '#2E7D32',
-                    color: '#FFFFFF',
-                    px: 4,
-                    py: 1.8,
-                    fontSize: '1.1rem',
-                    fontWeight: 700,
-                    borderRadius: 2,
-                    textTransform: 'none',
-                    fontFamily: '"Inter", sans-serif',
-                    boxShadow: '0 4px 14px rgba(46,125,50,0.4)',
-                    '&:hover': {
-                      background: '#1B5E20',
-                      boxShadow: '0 6px 20px rgba(46,125,50,0.5)',
-                    },
-                  }}
-                >
-                  Go to Dashboard
-                </Button>
-              )}
-            </Stack>
+                    <Button
+                      component={Link}
+                      to={`/user/dashboard`}
+                      variant="contained"
+                      size="large"
+                      endIcon={<ArrowForwardIcon />}
+                      sx={{
+                        background: 'linear-gradient(135deg, #2E7D32, #43A047)',
+                        color: '#FFFFFF',
+                        px: 4,
+                        py: 1.8,
+                        fontSize: '1.1rem',
+                        fontWeight: 700,
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        fontFamily: '"Inter", sans-serif',
+                        boxShadow: '0 8px 32px rgba(46,125,50,0.4)',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, #1B5E20, #2E7D32)',
+                          boxShadow: '0 12px 40px rgba(46,125,50,0.5)',
+                        },
+                      }}
+                    >
+                      Go to Dashboard
+                    </Button>
+                  </motion.div>
+                )}
+              </Stack>
+            </motion.div>
 
             {/* Trust Indicators */}
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={3} 
-              justifyContent="center"
-              flexWrap="wrap"
-              gap={2}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
             >
-              {['No credit card required', 'Free forever plan', 'Cancel anytime'].map((text, i) => (
-                <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CheckCircleIcon sx={{ fontSize: 20, color: '#2E7D32' }} />
-                  <Typography variant="body2" sx={{ color: '#1B5E20', fontWeight: 600, fontFamily: '"Inter", sans-serif' }}>
-                    {text}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
+              <Stack 
+                direction={{ xs: 'column', sm: 'row' }} 
+                spacing={3} 
+                justifyContent="center"
+                flexWrap="wrap"
+                gap={2}
+              >
+                {['No credit card required', 'Free forever plan', 'Cancel anytime'].map((text, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <CheckCircleIcon sx={{ fontSize: 20, color: '#2E7D32' }} />
+                      <Typography variant="body2" sx={{ color: '#1B5E20', fontWeight: 600, fontFamily: '"Inter", sans-serif' }}>
+                        {text}
+                      </Typography>
+                    </Box>
+                  </motion.div>
+                ))}
+              </Stack>
+            </motion.div>
           </Box>
         </Container>
       </Box>
 
       {/* Stats Section */}
-      <Box sx={{ 
-        py: 8 
-      }}>
+      <Box sx={{ py: 8 }} ref={statsRef}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {stats.map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
-                <Box
-                  sx={{
-                    textAlign: 'center',
-                    p: 3,
-                    borderRadius: 3,
-                    background: 'rgba(255,255,255,0.8)',
-                    backdropFilter: 'blur(10px)',
-                    border: '3px solid #2E7D32',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: '0 12px 24px rgba(46,125,50,0.3)',
-                      background: 'rgba(255,255,255,0.95)',
-                    },
-                  }}
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={statsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ y: -10 }}
                 >
-                  <Box sx={{ color: '#2E7D32', mb: 2 }}>
-                    {stat.icon}
-                  </Box>
-                  <Typography
-                    variant="h3"
-                    sx={{ 
-                      mb: 1, 
-                      fontWeight: 900, 
-                      color: '#1B5E20',
-                      fontSize: { xs: '2rem', md: '2.5rem' },
-                      fontFamily: '"Poppins", sans-serif'
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      p: 3,
+                      borderRadius: 3,
+                      background: 'rgba(255,255,255,0.9)',
+                      backdropFilter: 'blur(20px)',
+                      border: '2px solid rgba(46,125,50,0.2)',
+                      boxShadow: '0 8px 32px rgba(46,125,50,0.1)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: '0 16px 48px rgba(46,125,50,0.2)',
+                        background: 'rgba(255,255,255,0.95)',
+                        border: '2px solid rgba(46,125,50,0.3)',
+                      },
                     }}
                   >
-                    {stat.number}
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 700, color: '#2E7D32', fontFamily: '"Inter", sans-serif' }}>
-                    {stat.label}
-                  </Typography>
-                </Box>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <Box sx={{ color: '#2E7D32', mb: 2 }}>
+                        {stat.icon}
+                      </Box>
+                    </motion.div>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={statsInView ? { scale: 1 } : { scale: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                    >
+                      <Typography
+                        variant="h3"
+                        sx={{ 
+                          mb: 1, 
+                          fontWeight: 900, 
+                          background: 'linear-gradient(135deg, #1B5E20, #2E7D32)',
+                          backgroundClip: 'text',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          fontSize: { xs: '2rem', md: '2.5rem' },
+                          fontFamily: '"Poppins", sans-serif'
+                        }}
+                      >
+                        {stat.number}
+                      </Typography>
+                    </motion.div>
+                    <Typography variant="body1" sx={{ fontWeight: 700, color: '#2E7D32', fontFamily: '"Inter", sans-serif' }}>
+                      {stat.label}
+                    </Typography>
+                  </Box>
+                </motion.div>
               </Grid>
             ))}
           </Grid>

@@ -25,18 +25,49 @@ const glass = {
   borderRadius: '24px',
 };
 
-// ... styling for textfields inside glassmorphism
 const glassInputStyles = {
   '& .MuiOutlinedInput-root': {
-    borderRadius: '16px', background: 'rgba(255,255,255,0.03)', color: 'white',
-    '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-    '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.2)' },
-    '&.Mui-focused fieldset': { borderColor: '#8B5CF6' },
+    borderRadius: '16px', 
+    background: 'linear-gradient(135deg, #87CEEB, #B0E0E6)', // Sky blue gradient background
+    color: '#1a1a1a', // Dark text for contrast
+    border: '2px solid rgba(139, 92, 246, 0.3)',
+    '& fieldset': { border: 'none' }, // Remove default border
+    '&:hover': { 
+      background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+      borderColor: '#8B5CF6',
+      boxShadow: '0 4px 12px rgba(135, 206, 235, 0.3)'
+    },
+    '&.Mui-focused': { 
+      background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+      borderColor: '#8B5CF6', 
+      borderWidth: '2px',
+      boxShadow: '0 0 0 3px rgba(139, 92, 246, 0.2)'
+    },
   },
-  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.5)' },
-  '& .MuiInputLabel-root.Mui-focused': { color: '#8B5CF6' },
-  '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.6)' },
-  '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)', opacity: 1 }
+  '& .MuiInputLabel-root': { 
+    color: '#8B5CF6', 
+    fontWeight: 700,
+    fontSize: '1rem'
+  },
+  '& .MuiInputLabel-root.Mui-focused': { 
+    color: '#8B5CF6', 
+    fontWeight: 800 
+  },
+  '& .MuiSvgIcon-root': { 
+    color: '#8B5CF6' 
+  },
+  '& .MuiInputBase-input': { 
+    color: '#1a1a1a !important', 
+    fontWeight: 600,
+    fontSize: '1.1rem'
+  },
+  '& .MuiInputBase-input::placeholder': { 
+    color: 'rgba(26, 26, 26, 0.6)', 
+    opacity: 1 
+  },
+  '& .MuiInputAdornment-root .MuiSvgIcon-root': {
+    color: '#8B5CF6'
+  }
 };
 
 const eventTypes = [
@@ -227,12 +258,37 @@ const CreateEventPage = () => {
                     sx={{
                       width: '100%',
                       '& .MuiOutlinedInput-root': {
-                        borderRadius: '16px', background: 'rgba(255,255,255,0.03)', color: 'white',
-                        '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                        '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.2)' },
+                        borderRadius: '16px', 
+                        background: 'linear-gradient(135deg, #87CEEB, #B0E0E6)',
+                        color: '#1a1a1a',
+                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                        '& fieldset': { border: 'none' },
+                        '&:hover': { 
+                          background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+                          borderColor: '#8B5CF6',
+                          boxShadow: '0 4px 12px rgba(135, 206, 235, 0.3)'
+                        },
+                        '&.Mui-focused': { 
+                          background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+                          borderColor: '#8B5CF6', 
+                          borderWidth: '2px',
+                          boxShadow: '0 0 0 3px rgba(139, 92, 246, 0.2)'
+                        },
                       },
-                      '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.5)' },
-                      '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.6)' },
+                      '& .MuiInputLabel-root': { 
+                        color: '#8B5CF6', 
+                        fontWeight: 700 
+                      },
+                      '& .MuiInputLabel-root.Mui-focused': { 
+                        color: '#8B5CF6' 
+                      },
+                      '& .MuiSvgIcon-root': { 
+                        color: '#8B5CF6' 
+                      },
+                      '& .MuiInputBase-input': { 
+                        color: '#1a1a1a !important', 
+                        fontWeight: 600 
+                      },
                     }}
                   />
                 </LocalizationProvider>
@@ -246,12 +302,37 @@ const CreateEventPage = () => {
                     sx={{
                       width: '100%',
                       '& .MuiOutlinedInput-root': {
-                        borderRadius: '16px', background: 'rgba(255,255,255,0.03)', color: 'white',
-                        '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                        '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.2)' },
+                        borderRadius: '16px', 
+                        background: 'linear-gradient(135deg, #87CEEB, #B0E0E6)',
+                        color: '#1a1a1a',
+                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                        '& fieldset': { border: 'none' },
+                        '&:hover': { 
+                          background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+                          borderColor: '#8B5CF6',
+                          boxShadow: '0 4px 12px rgba(135, 206, 235, 0.3)'
+                        },
+                        '&.Mui-focused': { 
+                          background: 'linear-gradient(135deg, #7EC8E3, #A8D8EA)',
+                          borderColor: '#8B5CF6', 
+                          borderWidth: '2px',
+                          boxShadow: '0 0 0 3px rgba(139, 92, 246, 0.2)'
+                        },
                       },
-                      '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.5)' },
-                      '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.6)' },
+                      '& .MuiInputLabel-root': { 
+                        color: '#8B5CF6', 
+                        fontWeight: 700 
+                      },
+                      '& .MuiInputLabel-root.Mui-focused': { 
+                        color: '#8B5CF6' 
+                      },
+                      '& .MuiSvgIcon-root': { 
+                        color: '#8B5CF6' 
+                      },
+                      '& .MuiInputBase-input': { 
+                        color: '#1a1a1a !important', 
+                        fontWeight: 600 
+                      },
                     }}
                   />
                 </LocalizationProvider>

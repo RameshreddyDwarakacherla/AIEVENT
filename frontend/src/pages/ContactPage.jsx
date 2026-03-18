@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Box,
   Container,
@@ -26,6 +26,7 @@ import {
   Instagram as InstagramIcon,
   LinkedIn as LinkedInIcon
 } from '@mui/icons-material';
+import { motion, useInView } from 'framer-motion';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({

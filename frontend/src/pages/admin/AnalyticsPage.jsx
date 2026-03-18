@@ -38,6 +38,7 @@ import EventIcon from '@mui/icons-material/Event';
 import StoreIcon from '@mui/icons-material/Store';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import StarIcon from '@mui/icons-material/Star';
+import { PageContainer } from '../../components/common';
 
 const AnalyticsPage = () => {
   const theme = useTheme();
@@ -138,38 +139,28 @@ const AnalyticsPage = () => {
   }
 
   return (
-    <Box 
-      component={motion.div}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      sx={{ p: { xs: 2, md: 4 }, background: 'transparent' }}
-    >
-      {/* Header Area */}
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: 'white', mb: 1, letterSpacing: '-0.02em' }}>
-            Platform Insights
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>
-            Real-time analytics and growth metrics for EventMaster
-          </Typography>
-        </Box>
+    <PageContainer
+      title="Platform Insights"
+      subtitle="Real-time analytics and growth metrics for EventMaster"
+      actions={
         <Tooltip title="Refresh Data">
           <IconButton 
             onClick={fetchAnalyticsData}
             sx={{ 
-              background: 'rgba(255,255,255,0.05)', 
-              color: 'white',
-              '&:hover': { background: 'rgba(255,255,255,0.1)', transform: 'rotate(180deg)' },
+              background: 'rgba(59, 130, 246, 0.1)', 
+              color: '#1E40AF',
+              '&:hover': { 
+                background: 'rgba(59, 130, 246, 0.2)', 
+                transform: 'rotate(180deg)' 
+              },
               transition: 'all 0.5s ease'
             }}
           >
             <RefreshIcon />
           </IconButton>
         </Tooltip>
-      </Box>
-
+      }
+    >
       {/* Main Stats Row */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {[
@@ -404,11 +395,11 @@ const AnalyticsPage = () => {
 
       {/* Footer Info */}
       <Box sx={{ mt: 6, textAlign: 'center' }}>
-        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em', fontWeight: 600 }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary', letterSpacing: '0.1em', fontWeight: 600 }}>
           GENERATED AT {new Date().toLocaleTimeString()} • SESSION ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}
         </Typography>
       </Box>
-    </Box>
+    </PageContainer>
   );
 };
 

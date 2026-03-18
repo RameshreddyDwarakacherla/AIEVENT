@@ -1,19 +1,7 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { auth, adminOnly } from '../middleware/auth.js';
 const router = express.Router();
-
-const auth = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ success: false, message: 'No token provided' });
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
-    next();
-  } catch (error) {
-    res.status(401).json({ success: false, message: 'Invalid token' });
-  }
-};
 
 // Get all users (admin)
 router.get('/', auth, async (req, res) => {

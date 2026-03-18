@@ -89,8 +89,8 @@ const Header = () => {
   };
 
   const getGradient = () => {
+    if (userRole === 'admin') return 'linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)';
     if (userRole === 'vendor') return 'linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)';
-    if (userRole === 'admin') return 'linear-gradient(135deg, #388E3C 0%, #2E7D32 100%)';
     return 'linear-gradient(135deg, #43A047 0%, #2E7D32 100%)';
   };
 
@@ -150,13 +150,45 @@ const Header = () => {
   const isActive = (path) => location.pathname === path;
 
   // ─── SIDEBAR CONTENT (shared for both desktop + mobile drawer) ───────────
-  const SidebarContent = ({ isMobile = false }) => (
+  const SidebarContent = ({ isMobile = false }) => {
+    const getSidebarBackground = () => {
+      if (userRole === 'admin') {
+        return 'linear-gradient(180deg, #1E3A8A 0%, #1E40AF 50%, #3B82F6 100%)';
+      }
+      if (userRole === 'vendor') {
+        return 'linear-gradient(180deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)';
+      }
+      return 'linear-gradient(180deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)';
+    };
+
+    const getSidebarOrbColors = () => {
+      if (userRole === 'admin') {
+        return {
+          orb1: 'rgba(96, 165, 250, 0.2)',
+          orb2: 'rgba(59, 130, 246, 0.15)',
+        };
+      }
+      if (userRole === 'vendor') {
+        return {
+          orb1: 'rgba(67,160,71,0.15)',
+          orb2: 'rgba(46,125,50,0.12)',
+        };
+      }
+      return {
+        orb1: 'rgba(67,160,71,0.15)',
+        orb2: 'rgba(46,125,50,0.12)',
+      };
+    };
+
+    const orbColors = getSidebarOrbColors();
+
+    return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        background: 'linear-gradient(180deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)',
+        background: getSidebarBackground(),
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -165,7 +197,7 @@ const Header = () => {
       <Box sx={{
         position: 'absolute', top: -60, right: -60,
         width: 180, height: 180,
-        background: 'rgba(67,160,71,0.15)',
+        background: orbColors.orb1,
         borderRadius: '50%',
         filter: 'blur(40px)',
         animation: 'pulse 4s ease-in-out infinite',
@@ -174,7 +206,7 @@ const Header = () => {
       <Box sx={{
         position: 'absolute', bottom: 100, left: -40,
         width: 140, height: 140,
-        background: 'rgba(46,125,50,0.12)',
+        background: orbColors.orb2,
         borderRadius: '50%',
         filter: 'blur(35px)',
         animation: 'pulse 6s ease-in-out infinite 2s',
@@ -280,6 +312,33 @@ const Header = () => {
       }}>
         {navigationItems.map((item, index) => {
           const active = isActive(item.path);
+          
+          // Dynamic colors based on user role
+          const getActiveColors = () => {
+            if (userRole === 'admin') {
+              return {
+                bg: 'rgba(96, 165, 250, 0.25)',
+                border: 'rgba(96, 165, 250, 0.4)',
+                shadow: '0 8px 16px rgba(0,0,0,0.2), inset 0 0 10px rgba(96, 165, 250, 0.1)',
+                pill: 'rgba(96, 165, 250, 0.15)',
+                accent: '#93C5FD',
+                iconColor: '#BFDBFE',
+                glow: 'rgba(147, 197, 253, 0.6)',
+              };
+            }
+            return {
+              bg: 'rgba(67, 160, 71, 0.25)',
+              border: 'rgba(67, 160, 71, 0.4)',
+              shadow: '0 8px 16px rgba(0,0,0,0.2), inset 0 0 10px rgba(67, 160, 71, 0.1)',
+              pill: 'rgba(67, 160, 71, 0.15)',
+              accent: '#81C784',
+              iconColor: '#A5D6A7',
+              glow: 'rgba(129,199,132,0.6)',
+            };
+          };
+          
+          const colors = getActiveColors();
+          
           return (
             <Tooltip
               key={item.path}
@@ -307,12 +366,12 @@ const Header = () => {
                   px: collapsed && !isMobile ? 1.5 : 2,
                   py: 1.4,
                   background: active 
-                    ? 'rgba(67, 160, 71, 0.25)' 
+                    ? colors.bg
                     : (hoveredItem === item.path ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
                   backdropFilter: active ? 'blur(10px)' : 'none',
-                  border: active ? '1px solid rgba(67, 160, 71, 0.4)' : '1px solid transparent',
+                  border: active ? `1px solid ${colors.border}` : '1px solid transparent',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: active ? '0 8px 16px rgba(0,0,0,0.2), inset 0 0 10px rgba(67, 160, 71, 0.1)' : 'none',
+                  boxShadow: active ? colors.shadow : 'none',
                   overflow: 'hidden',
                   '&::before': active ? {
                     content: '""',
@@ -320,9 +379,9 @@ const Header = () => {
                     left: 0, top: '50%',
                     transform: 'translateY(-50%)',
                     width: 4, height: '50%',
-                    background: '#81C784',
+                    background: colors.accent,
                     borderRadius: '0 4px 4px 0',
-                    boxShadow: '0 0 10px #81C784',
+                    boxShadow: `0 0 10px ${colors.accent}`,
                   } : {},
                 }}
               >
@@ -333,18 +392,18 @@ const Header = () => {
                     sx={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'rgba(67, 160, 71, 0.15)',
+                      background: colors.pill,
                       borderRadius: 'inherit',
                       zIndex: -1,
                     }}
                   />
                 )}
                 <Box sx={{
-                  color: active ? '#A5D6A7' : 'rgba(255,255,255,0.6)',
+                  color: active ? colors.iconColor : 'rgba(255,255,255,0.6)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.3s ease',
                   transform: (hoveredItem === item.path || active) ? 'scale(1.1)' : 'scale(1)',
-                  filter: active ? 'drop-shadow(0 0 8px rgba(129,199,132,0.6))' : 'none',
+                  filter: active ? `drop-shadow(0 0 8px ${colors.glow})` : 'none',
                   '& .MuiSvgIcon-root': { fontSize: 24 },
                 }}>
                   {item.icon}
@@ -366,7 +425,7 @@ const Header = () => {
                        initial={{ opacity: 0, x: -5 }}
                        animate={{ opacity: 1, x: 0 }}
                        sx={{ ml: 'auto' }}>
-                    <ArrowIcon sx={{ color: '#A5D6A7', fontSize: 18 }} />
+                    <ArrowIcon sx={{ color: colors.iconColor, fontSize: 18 }} />
                   </Box>
                 )}
               </Box>
@@ -438,15 +497,19 @@ const Header = () => {
             PaperProps={{
               sx: {
                 borderRadius: 3, minWidth: 220,
-                background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
+                background: userRole === 'admin'
+                  ? 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)'
+                  : 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-                border: '1px solid rgba(67,160,71,0.2)',
+                border: userRole === 'admin'
+                  ? '1px solid rgba(96, 165, 250, 0.2)'
+                  : '1px solid rgba(67,160,71,0.2)',
                 color: 'white',
                 overflow: 'hidden',
               }
             }}
           >
-            <Box sx={{ px: 2.5, py: 2, background: 'rgba(67,160,71,0.1)' }}>
+            <Box sx={{ px: 2.5, py: 2, background: userRole === 'admin' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(67,160,71,0.1)' }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'white' }}>
                 {user.email?.split('@')[0]}
               </Typography>
@@ -465,10 +528,13 @@ const Header = () => {
                 onClick={() => { navigate(item.path); setUserMenuAnchor(null); }}
                 sx={{
                   py: 1.5, px: 2.5, gap: 1.5, color: 'rgba(255,255,255,0.85)',
-                  '&:hover': { background: 'rgba(67,160,71,0.2)', color: 'white' },
+                  '&:hover': { 
+                    background: userRole === 'admin' ? 'rgba(96, 165, 250, 0.2)' : 'rgba(67,160,71,0.2)', 
+                    color: 'white' 
+                  },
                 }}
               >
-                <Box sx={{ color: '#81C784' }}>{item.icon}</Box>
+                <Box sx={{ color: userRole === 'admin' ? '#93C5FD' : '#81C784' }}>{item.icon}</Box>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.label}</Typography>
               </MenuItem>
             ))}
@@ -519,6 +585,7 @@ const Header = () => {
       )}
     </Box>
   );
+  };
 
   const sidebarWidth = collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_EXPANDED;
 
@@ -554,7 +621,9 @@ const Header = () => {
           top: 0, left: 0, right: 0,
           height: 64,
           zIndex: 1200,
-          background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
+          background: userRole === 'admin' 
+            ? 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)'
+            : 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
           backdropFilter: 'blur(20px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
           alignItems: 'center',

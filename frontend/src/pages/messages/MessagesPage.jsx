@@ -37,11 +37,11 @@ const fmtMsg = (ts) =>
 
 const avatarGrad = (char = 'A') => {
   const gs = [
-    'linear-gradient(135deg,#8B5CF6,#EC4899)',
-    'linear-gradient(135deg,#3B82F6,#06B6D4)',
-    'linear-gradient(135deg,#10B981,#3B82F6)',
-    'linear-gradient(135deg,#F59E0B,#EF4444)',
-    'linear-gradient(135deg,#EC4899,#8B5CF6)',
+    'linear-gradient(135deg, #2E7D32, #43A047)',  // Primary green
+    'linear-gradient(135deg, #1B5E20, #2E7D32)',  // Dark green
+    'linear-gradient(135deg, #43A047, #66BB6A)',  // Medium green
+    'linear-gradient(135deg, #388E3C, #4CAF50)',  // Balanced green
+    'linear-gradient(135deg, #2E7D32, #66BB6A)',  // Light green
   ];
   return gs[char.charCodeAt(0) % gs.length];
 };

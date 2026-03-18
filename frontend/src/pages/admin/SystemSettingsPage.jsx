@@ -33,6 +33,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import SaveIcon from '@mui/icons-material/Save';
+import { PageContainer } from '../../components/common';
 import EditIcon from '@mui/icons-material/Edit';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -317,30 +318,22 @@ const SystemSettingsPage = () => {
   }
 
   return (
-    <Box
-      component={motion.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      sx={{ p: { xs: 2, md: 4 }, background: 'transparent', minHeight: '100vh' }}
-    >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 800, color: 'white', mb: 1 }}>
-            System Intelligence
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-            Configure and monitor core platform parameters
-          </Typography>
-        </Box>
+    <PageContainer
+      title="System Intelligence"
+      subtitle="Configure and monitor core platform parameters"
+      actions={
         <Button
           variant="contained"
           sx={{
-            background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-            boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
+            background: 'linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)',
+            boxShadow: '0 4px 14px rgba(59, 130, 246, 0.4)',
             borderRadius: 3,
             px: 4, py: 1.2,
             fontWeight: 700,
-            '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 20px rgba(139, 92, 246, 0.5)' }
+            '&:hover': { 
+              transform: 'translateY(-2px)', 
+              boxShadow: '0 6px 20px rgba(59, 130, 246, 0.5)' 
+            }
           }}
           startIcon={<SaveIcon />}
           onClick={handleSaveSettings}
@@ -348,8 +341,8 @@ const SystemSettingsPage = () => {
         >
           {saving ? 'Syncing...' : 'Save All Changes'}
         </Button>
-      </Box>
-
+      }
+    >
       {/* System Stats Row */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
         {[
@@ -517,7 +510,7 @@ const SystemSettingsPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </PageContainer>
   );
 };
 

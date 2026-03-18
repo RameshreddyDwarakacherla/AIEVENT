@@ -136,10 +136,13 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      const { user: googleUser, token } = response.data;
+      const { user: googleUser, accessToken: token, refreshToken } = response.data;
 
-      // Store JWT
+      // Store JWT and refresh token
       localStorage.setItem('authToken', token);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
       localStorage.setItem('userRole', googleUser.role || role);
       setUser(googleUser);
       setUserRole(googleUser.role || role);
@@ -168,8 +171,14 @@ export const AuthProvider = ({ children }) => {
       if (!email || !password) {
         return { success: false, error: 'Email and password are required.' };
       }
-      if (password.length < 6) {
-        return { success: false, error: 'Password must be at least 6 characters long.' };
+      if (password.length < 8) {
+        return { success: false, error: 'Password must be at least 8 characters long.' };
+      }
+      
+      // Check password complexity
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+      if (!passwordRegex.test(password)) {
+        return { success: false, error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).' };
       }
       if (!firstName || !lastName) {
         return { success: false, error: 'First name and last name are required.' };

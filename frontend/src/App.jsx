@@ -2,6 +2,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AppProvider } from './contexts/AppContext';
 import AppRouter from './router/AppRouter';
+import ChatbotWidget from './components/chatbot/ChatbotWidget';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +12,7 @@ function App() {
       <ThemeProvider>
         <AppProvider>
           <AppRouter />
+          <ChatbotWidget />
           <ToastContainer position="top-right" autoClose={5000} />
         </AppProvider>
       </ThemeProvider>

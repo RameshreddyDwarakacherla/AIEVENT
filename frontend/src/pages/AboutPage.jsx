@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Box,
   Container,
@@ -24,6 +24,7 @@ import {
   TrendingUp as TrendingUpIcon,
   CheckCircle as CheckCircleIcon
 } from '@mui/icons-material';
+import { motion, useInView } from 'framer-motion';
 
 const AboutPage = () => {
   const navigate = useNavigate();

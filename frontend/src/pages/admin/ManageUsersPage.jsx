@@ -39,9 +39,9 @@ import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonIcon from '@mui/icons-material/Person';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PageContainer } from '../../components/common';
 
 const USER_ROLES = ['user', 'vendor', 'admin'];
 
@@ -251,28 +251,31 @@ const ManageUsersPage = () => {
   }
 
   return (
-    <Box
-      component={motion.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      sx={{ p: { xs: 2, md: 4 }, background: 'transparent', minHeight: '100vh' }}
+    <PageContainer
+      title="User Management"
+      badge={`${users.length} Total Users`}
     >
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: 'white' }}>
-          User Management
-        </Typography>
-        <Chip 
-          label={`${users.length} Total Users`} 
-          variant="outlined" 
-          sx={{ color: '#A78BFA', borderColor: 'rgba(167,139,250,0.3)', fontWeight: 700 }} 
-        />
-      </Box>
-
       {/* Filters and Search */}
       <Box sx={{ mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={8}>
-            <Tabs value={tabValue} onChange={handleTabChange} aria-label="user filter tabs">
+            <Tabs 
+              value={tabValue} 
+              onChange={handleTabChange} 
+              aria-label="user filter tabs"
+              sx={{
+                '& .MuiTab-root': {
+                  color: 'text.secondary',
+                  fontWeight: 600,
+                },
+                '& .Mui-selected': {
+                  color: 'primary.main',
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'primary.main',
+                }
+              }}
+            >
               <Tab label="All Users" />
               <Tab label="Event Organizers" />
               <Tab label="Vendors" />
@@ -288,12 +291,27 @@ const ManageUsersPage = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <SearchIcon sx={{ color: 'text.secondary' }} />
                   </InputAdornment>
                 ),
               }}
               variant="outlined"
               size="small"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  '& fieldset': {
+                    borderColor: 'rgba(139, 92, 246, 0.2)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'rgba(139, 92, 246, 0.4)',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                }
+              }}
             />
           </Grid>
         </Grid>
@@ -305,13 +323,30 @@ const ManageUsersPage = () => {
         sx={{ 
           width: '100%', 
           overflow: 'hidden',
-          background: 'rgba(255,255,255,0.02)',
+          background: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: 4
+          border: '1px solid rgba(139, 92, 246, 0.1)',
+          borderRadius: 3,
+          boxShadow: '0 8px 32px rgba(139, 92, 246, 0.1)',
         }}
       >
-        <TableContainer sx={{ maxHeight: 650 }}>
+        <TableContainer 
+          sx={{ 
+            maxHeight: 650,
+            '& .MuiTableCell-head': {
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              color: 'text.primary',
+              fontWeight: 700,
+              borderBottom: '2px solid rgba(139, 92, 246, 0.2)',
+            },
+            '& .MuiTableCell-body': {
+              color: 'text.primary',
+            },
+            '& .MuiTableRow-root:hover': {
+              backgroundColor: 'rgba(139, 92, 246, 0.05)',
+            }
+          }}
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -570,7 +605,7 @@ const ManageUsersPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </PageContainer>
   );
 };
 

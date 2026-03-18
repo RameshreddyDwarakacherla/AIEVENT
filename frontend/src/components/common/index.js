@@ -1,4 +1,5 @@
 // Export all common components for easy importing
+export { default as PageContainer } from './PageContainer';
 export { default as AnimatedCounter } from './AnimatedCounter';
 export { default as NewsletterSignup } from './NewsletterSignup';
 export { default as LoadingSkeleton, CardSkeleton, TableSkeleton, DashboardSkeleton } from './LoadingSkeleton';

@@ -21,6 +21,7 @@ import reviewRoutes from './routes/reviews.js';
 import messageRoutes from './routes/messages.js';
 import notificationRoutes from './routes/notifications.js';
 import adminRoutes from './routes/admin.js';
+import chatbotRoutes from './routes/chatbot.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -119,6 +120,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

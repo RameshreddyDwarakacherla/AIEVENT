@@ -28,6 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
+import { PageContainer } from '../../components/common';
 import WarningIcon from '@mui/icons-material/Warning';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -80,37 +81,44 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const [usersRes, vendorStatsRes, eventStatsRes, pendingVendorsRes, recentEventsRes] = await Promise.allSettled([
-        api.get('/users/stats'),
-        api.get('/vendors/admin-stats'),
-        api.get('/events/admin-stats'),
-        api.get('/vendors/pending'),
-        api.get('/events/all'),
-      ]);
+      
+      // Fetch admin stats
+      const statsRes = await api.get('/admin/stats');
+      
+      if (statsRes.success) {
+        setStats({
+          totalUsers: statsRes.data.totalUsers || 0,
+          totalVendors: statsRes.data.totalVendors || 0,
+          totalEvents: statsRes.data.totalEvents || 0,
+          pendingVendors: statsRes.data.pendingVendors || 0,
+          activeEvents: statsRes.data.activeEvents || 0,
+          revenue: 125000 // mock revenue for display
+        });
+      }
 
-      const userStats = usersRes.status === 'fulfilled' && usersRes.value.success ? usersRes.value.data : {};
-      const vendorStats = vendorStatsRes.status === 'fulfilled' && vendorStatsRes.value.success ? vendorStatsRes.value.data : {};
-      const eventStats = eventStatsRes.status === 'fulfilled' && eventStatsRes.value.success ? eventStatsRes.value.data : {};
-      const pendingVs = pendingVendorsRes.status === 'fulfilled' && pendingVendorsRes.value.success ? pendingVendorsRes.value.data : [];
-      const events = recentEventsRes.status === 'fulfilled' && recentEventsRes.value.success ? recentEventsRes.value.data : [];
+      // Fetch pending vendors
+      const pendingVendorsRes = await api.get('/vendors/pending');
+      if (pendingVendorsRes.success) {
+        setPendingVendors(pendingVendorsRes.data.slice(0, 5));
+      }
 
-      setStats({
-        totalUsers: userStats.total || 0,
-        totalVendors: vendorStats.total || 0,
-        totalEvents: eventStats.total || 0,
-        pendingVendors: vendorStats.pending || 0,
-        activeEvents: eventStats.active || 0,
-        revenue: 125000 // mock revenue for display
-      });
+      // Fetch recent events
+      const eventsRes = await api.get('/admin/events');
+      if (eventsRes.success) {
+        setRecentEvents(eventsRes.data.slice(0, 6));
+      }
 
-      setPendingVendors(pendingVs.slice(0, 5));
-      setRecentEvents(events.slice(0, 6));
+      // Fetch recent users
+      const usersRes = await api.get('/admin/users');
+      if (usersRes.success) {
+        setRecentUsers(usersRes.data.slice(0, 5));
+      }
 
-      // Mock additional features requested: System Health & Activity
+      // Mock activity and system health
       setRecentActivity([
-        { id: 1, type: 'user_reg', text: 'New user registration: Sarah Johnson', time: '5m ago' },
-        { id: 2, type: 'vendor_verify', text: "Elite Catering submitted verification", time: '12m ago' },
-        { id: 3, type: 'event_create', text: 'New corporate event: Tech Summit 2026', time: '1h ago' },
+        { id: 1, type: 'user_reg', text: 'New user registration', time: '5m ago' },
+        { id: 2, type: 'vendor_verify', text: "Vendor submitted verification", time: '12m ago' },
+        { id: 3, type: 'event_create', text: 'New event created', time: '1h ago' },
         { id: 4, type: 'review_mod', text: 'Review reported for moderation', time: '2h ago' },
       ]);
 
@@ -121,13 +129,9 @@ const AdminDashboard = () => {
         memoryUsage: '42%'
       });
 
-      // Fetch recent users
-      const usersListRes = await api.get('/users');
-      if (usersListRes.success) {
-        setRecentUsers(usersListRes.data.slice(0, 5));
-      }
     } catch (err) {
       console.error('Admin dashboard error:', err);
+      toast.error('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
@@ -342,7 +346,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <Box sx={{
+    <Box className="admin-page" sx={{
       minHeight: '100vh',
       background: 'transparent', // Using Layout background
       p: { xs: 2, sm: 3, md: 4 },

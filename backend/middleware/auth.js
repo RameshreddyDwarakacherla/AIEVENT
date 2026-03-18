@@ -62,3 +62,26 @@ export const requireRole = (...roles) => (req, res, next) => {
 };
 
 export default auth;
+/**
+ * Optional auth middleware for chatbot (works with or without token)
+ */
+export const optionalAuth = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.userId).select('_id role isActive');
+
+      if (user && user.isActive) {
+        req.userId = user._id.toString();
+        req.userRole = user.role;
+      }
+    }
+    
+    next();
+  } catch (error) {
+    // Continue without authentication
+    next();
+  }
+};

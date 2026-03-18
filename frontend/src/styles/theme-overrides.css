@@ -1,0 +1,283 @@
+/* Material-UI Theme Overrides for Better Background Integration */
+
+/* Admin-specific blue theme with sky blue backgrounds */
+.admin-page .MuiPaper-root,
+.admin-page .MuiCard-root {
+  background: linear-gradient(135deg, 
+    rgba(135, 206, 250, 0.95) 0%, 
+    rgba(173, 216, 230, 0.95) 50%, 
+    rgba(176, 224, 230, 0.95) 100%) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 144, 255, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(30, 144, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-page .MuiPaper-root::before,
+.admin-page .MuiCard-root::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(30, 144, 255, 0.15) 0%, transparent 70%);
+  animation: rotateGradient 15s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.admin-page .MuiPaper-root > *,
+.admin-page .MuiCard-root > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.admin-page .MuiCard-root:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(30, 144, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(30, 144, 255, 0.5) !important;
+  background: linear-gradient(135deg, 
+    rgba(135, 206, 250, 1) 0%, 
+    rgba(173, 216, 230, 1) 50%, 
+    rgba(176, 224, 230, 1) 100%) !important;
+}
+
+.admin-page .MuiButton-containedPrimary {
+  background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%) !important;
+  box-shadow: 0 4px 16px rgba(30, 144, 255, 0.4) !important;
+}
+
+.admin-page .MuiTableHead-root .MuiTableCell-head {
+  background: linear-gradient(135deg, 
+    rgba(30, 144, 255, 0.2) 0%, 
+    rgba(65, 105, 225, 0.2) 100%) !important;
+  border-bottom: 2px solid rgba(30, 144, 255, 0.4) !important;
+  font-weight: 700 !important;
+}
+
+.admin-page .MuiTableRow-root:hover {
+  background: linear-gradient(90deg, 
+    rgba(30, 144, 255, 0.12) 0%, 
+    rgba(65, 105, 225, 0.12) 100%) !important;
+}
+
+.admin-page .MuiTabs-indicator {
+  background: linear-gradient(90deg, #1E90FF 0%, #4169E1 100%) !important;
+  height: 3px !important;
+}
+
+.admin-page .MuiTab-root.Mui-selected {
+  color: #1E90FF !important;
+  font-weight: 700 !important;
+}
+
+/* Stat cards with sky blue gradient backgrounds */
+.admin-page .MuiCardContent-root {
+  background: transparent !important;
+}
+
+/* Chart containers */
+.admin-page .recharts-wrapper {
+  background: transparent !important;
+}
+
+/* Enhanced text visibility on sky blue background */
+.admin-page .MuiTypography-root {
+  color: #1a1a1a !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.admin-page .MuiTypography-colorTextSecondary {
+  color: #2c3e50 !important;
+}
+
+/* Animated background for admin pages */
+.admin-page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, #87CEEB 0%, #ADD8E6 50%, #B0E0E6 100%);
+  z-index: -1;
+}
+
+.admin-page-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(65, 105, 225, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(135, 206, 250, 0.15) 0%, transparent 60%);
+  animation: floatBackground 20s ease-in-out infinite;
+}
+
+@keyframes floatBackground {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  33% { 
+    transform: translate(30px, -30px) scale(1.05);
+    opacity: 0.8;
+  }
+  66% { 
+    transform: translate(-20px, 20px) scale(0.95);
+    opacity: 0.9;
+  }
+}
+
+/* Paper Components */
+.MuiPaper-root {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08) !important;
+}
+
+/* Card Components */
+.MuiCard-root {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(139, 92, 246, 0.15) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Dialog Components */
+.MuiDialog-paper {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(139, 92, 246, 0.15) !important;
+}
+
+/* Menu Components */
+.MuiMenu-paper,
+.MuiPopover-paper {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15) !important;
+}
+
+/* TextField Components */
+.MuiTextField-root .MuiOutlinedInput-root {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #8B5CF6 !important;
+}
+
+/* Button Components */
+.MuiButton-containedPrimary {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%) !important;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.MuiButton-containedPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* Chip Components */
+.MuiChip-root {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Table Components */
+.MuiTableHead-root .MuiTableCell-head {
+  background: rgba(139, 92, 246, 0.08) !important;
+  color: #1E293B !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.2) !important;
+}
+
+.MuiTableBody-root .MuiTableCell-body {
+  color: #1E293B !important;
+}
+
+.MuiTableRow-root:hover {
+  background: rgba(139, 92, 246, 0.05) !important;
+}
+
+/* Tab Components */
+.MuiTabs-root .MuiTab-root {
+  color: #64748B !important;
+  font-weight: 600 !important;
+}
+
+.MuiTabs-root .MuiTab-root.Mui-selected {
+  color: #8B5CF6 !important;
+}
+
+.MuiTabs-indicator {
+  background-color: #8B5CF6 !important;
+}
+
+/* Typography */
+.MuiTypography-root {
+  color: #1E293B !important;
+}
+
+.MuiTypography-colorTextSecondary {
+  color: #64748B !important;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .MuiPaper-root,
+.dark-mode .MuiPaper-root {
+  background: rgba(30, 37, 48, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .MuiCard-root,
+.dark-mode .MuiCard-root {
+  background: rgba(30, 37, 48, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .MuiTypography-root,
+.dark-mode .MuiTypography-root {
+  color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .MuiTypography-colorTextSecondary,
+.dark-mode .MuiTypography-colorTextSecondary {
+  color: #94A3B8 !important;
+}
