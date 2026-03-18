@@ -153,18 +153,25 @@ AIEVENT/
 
 3. **Set up environment variables**
 
-   Create `backend/.env`:
-   ```env
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/aieventplanner
-   JWT_SECRET=your_jwt_secret_key_here
-   NODE_ENV=development
+   **⚠️ IMPORTANT: Follow the security setup guide first!**
+   
+   See [SECURITY_SETUP.md](SECURITY_SETUP.md) for detailed instructions.
+
+   **Quick Setup:**
+   ```bash
+   # Copy example files
+   cp backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   
+   # Edit the files and add your actual API keys and credentials
+   # Never commit .env files to version control!
    ```
 
-   Create `frontend/.env`:
-   ```env
-   VITE_API_URL=http://localhost:5000/api
-   ```
+   **Required Environment Variables:**
+   - MongoDB connection string
+   - JWT secret key
+   - Google Gemini API key
+   - Google OAuth credentials
 
 4. **Start MongoDB**
    ```bash
@@ -237,6 +244,19 @@ The application uses a professional green theme:
 - Dark: `#1B5E20` (Dark Forest Green)
 - Light: `#81C784` (Light Green)
 - Background: `linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)`
+
+## 🔐 Security
+
+This application implements several security measures:
+
+- **Environment Variables**: All sensitive data is stored in `.env` files (not committed to git)
+- **JWT Authentication**: Secure token-based authentication
+- **Password Hashing**: bcrypt for secure password storage
+- **CORS Protection**: Configured for secure cross-origin requests
+- **Input Validation**: Server-side validation for all inputs
+- **API Key Protection**: Backend-only storage of sensitive API keys
+
+**⚠️ Security Setup Required**: See [SECURITY_SETUP.md](SECURITY_SETUP.md) for complete setup instructions.
 
 ## 🔐 User Roles
 
