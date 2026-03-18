@@ -21,6 +21,7 @@ class APIClient {
   async request(endpoint, options = {}) {
     const headers = {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
       ...options.headers,
     };
 
@@ -31,12 +32,17 @@ class APIClient {
     }
 
     const config = {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
       ...options,
       headers,
     };
 
     try {
+      console.log(`Making ${config.method} request to: ${API_URL}${endpoint}`);
       const response = await fetch(`${API_URL}${endpoint}`, config);
+      console.log(`Response status: ${response.status}`);
 
       // Handle 401 Unauthorized
       if (response.status === 401) {
@@ -60,6 +66,7 @@ class APIClient {
       let data;
       try {
         data = await response.json();
+        console.log('Response data:', data);
       } catch (parseError) {
         console.error('Failed to parse response:', parseError);
         throw new Error('Invalid response from server');
@@ -76,6 +83,7 @@ class APIClient {
 
       return data;
     } catch (error) {
+      console.error(`API Error for ${endpoint}:`, error);
       if (endpoint.includes('/auth/me')) {
         return { data: { session: null, user: null }, error: null };
       }

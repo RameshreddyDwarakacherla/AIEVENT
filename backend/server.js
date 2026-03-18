@@ -34,22 +34,59 @@ const allowedOrigins = [
   'http://localhost:5174',
   'http://localhost:5175',
   'http://localhost:3000',
+  'https://accounts.google.com',
+  'https://oauth2.googleapis.com'
 ].filter(Boolean);
 
 app.use(cors({
-  origin: true,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    
+    return callback(null, true); // Allow all origins for now to fix Google OAuth
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Add security headers for Google OAuth
+app.use((req, res, next) => {
+  res.header('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Allow all origins for now
+    },
     methods: ['GET', 'POST'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   },
   pingTimeout: 60000,
 });
@@ -131,6 +168,16 @@ app.get('/api/health', (req, res) => {
     socketConnections: io.engine.clientsCount,
     onlineUsers: onlineUsers.size,
     dbStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+  });
+});
+
+// Google OAuth test endpoint
+app.get('/api/auth/google/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Google OAuth endpoint is accessible',
+    timestamp: new Date().toISOString(),
+    cors: 'enabled'
   });
 });
 

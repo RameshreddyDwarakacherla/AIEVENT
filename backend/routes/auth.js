@@ -488,27 +488,42 @@ router.post('/reset-password/:token', [
   }
 });
 
+// Google OAuth preflight
+router.options('/google', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
+
 // Google OAuth
 router.post('/google', async (req, res) => {
   try {
+    console.log('Google OAuth request received:', { body: req.body, headers: req.headers });
     const { access_token, role } = req.body;
 
     if (!access_token) {
+      console.log('No access token provided');
       return res.status(400).json({ 
         success: false, 
         message: 'Google access token is required' 
       });
     }
 
+    console.log('Verifying Google token...');
     // Verify Google token and get user info
     let googleUser;
     try {
       const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
       if (!response.ok) {
+        console.log('Google token verification failed:', response.status, response.statusText);
         throw new Error('Failed to verify Google token');
       }
       googleUser = await response.json();
+      console.log('Google user info:', googleUser);
     } catch (error) {
+      console.error('Google token verification error:', error);
       return res.status(401).json({
         success: false,
         message: 'Invalid Google access token'
@@ -518,16 +533,19 @@ router.post('/google', async (req, res) => {
     const { email, given_name: firstName, family_name: lastName, sub: googleId, picture: avatarUrl } = googleUser;
 
     if (!email || !googleId) {
+      console.log('Missing email or Google ID:', { email, googleId });
       return res.status(400).json({ 
         success: false, 
         message: 'Email and Google ID are required' 
       });
     }
 
+    console.log('Finding or creating user...');
     // Find or create user
     let user = await User.findOne({ $or: [{ email }, { googleId }] });
 
     if (user) {
+      console.log('Existing user found:', user._id);
       // Update Google ID if not set
       if (!user.googleId) {
         user.googleId = googleId;
@@ -543,6 +561,7 @@ router.post('/google', async (req, res) => {
       user.lastLogin = new Date();
       await user.save();
     } else {
+      console.log('Creating new user...');
       // Create new user
       user = new User({
         email,
@@ -555,10 +574,12 @@ router.post('/google', async (req, res) => {
         role: role || 'user'
       });
       await user.save();
+      console.log('New user created:', user._id);
     }
 
     // Check if account is active
     if (!user.isActive) {
+      console.log('User account is suspended:', user._id);
       return res.status(403).json({
         success: false,
         message: 'Your account has been suspended. Please contact support.',
@@ -566,10 +587,12 @@ router.post('/google', async (req, res) => {
       });
     }
 
+    console.log('Generating tokens...');
     // Generate tokens
     const accessToken = generateAccessToken(user._id);
     const refreshToken = await generateRefreshToken(user._id, req.ip);
 
+    console.log('Google OAuth successful for user:', user._id);
     res.json({
       success: true,
       message: 'Google authentication successful',
@@ -588,6 +611,7 @@ router.post('/google', async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Google OAuth error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
