@@ -16,3 +16,4 @@ export { default as DataTable } from './DataTable';
 export { default as QuickActions } from './QuickActions';
 export { default as NotificationBadge } from './NotificationBadge';
 export { default as FilterPanel } from './FilterPanel';
+export { default as ReviewSystem } from './ReviewSystem';

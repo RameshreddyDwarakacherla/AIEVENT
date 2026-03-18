@@ -33,13 +33,32 @@ router.get('/my-vendor-reviews', auth, async (req, res) => {
 // Create review
 router.post('/', auth, async (req, res) => {
   try {
+    // Check if user already reviewed this vendor
+    const existingReview = await Review.findOne({ 
+      vendorId: req.body.vendorId, 
+      userId: req.userId 
+    });
+
+    if (existingReview) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You have already reviewed this vendor. You can only submit one review per vendor.' 
+      });
+    }
+
     const review = new Review({ ...req.body, userId: req.userId });
     await review.save();
+
+    // Populate user info for the response
+    await review.populate('userId', 'firstName lastName avatarUrl');
 
     // Update vendor's avg rating
     const allReviews = await Review.find({ vendorId: req.body.vendorId });
     const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
-    await Vendor.findByIdAndUpdate(req.body.vendorId, { avgRating: avg, totalReviews: allReviews.length });
+    await Vendor.findByIdAndUpdate(req.body.vendorId, { 
+      avgRating: Math.round(avg * 10) / 10, // Round to 1 decimal place
+      totalReviews: allReviews.length 
+    });
 
     res.status(201).json({ success: true, data: review });
   } catch (error) {
