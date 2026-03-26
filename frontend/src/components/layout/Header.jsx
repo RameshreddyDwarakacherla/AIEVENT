@@ -89,9 +89,7 @@ const Header = () => {
   };
 
   const getGradient = () => {
-    if (userRole === 'admin') return 'linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)';
-    if (userRole === 'vendor') return 'linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)';
-    return 'linear-gradient(135deg, #43A047 0%, #2E7D32 100%)';
+    return 'linear-gradient(135deg, #000000 0%, #333333 100%)';
   };
 
   const getNavigationItems = () => {
@@ -152,31 +150,13 @@ const Header = () => {
   // ─── SIDEBAR CONTENT (shared for both desktop + mobile drawer) ───────────
   const SidebarContent = ({ isMobile = false }) => {
     const getSidebarBackground = () => {
-      if (userRole === 'admin') {
-        return 'linear-gradient(180deg, #1E3A8A 0%, #1E40AF 50%, #3B82F6 100%)';
-      }
-      if (userRole === 'vendor') {
-        return 'linear-gradient(180deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)';
-      }
-      return 'linear-gradient(180deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)';
+      return 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)';
     };
 
     const getSidebarOrbColors = () => {
-      if (userRole === 'admin') {
-        return {
-          orb1: 'rgba(96, 165, 250, 0.2)',
-          orb2: 'rgba(59, 130, 246, 0.15)',
-        };
-      }
-      if (userRole === 'vendor') {
-        return {
-          orb1: 'rgba(67,160,71,0.15)',
-          orb2: 'rgba(46,125,50,0.12)',
-        };
-      }
       return {
-        orb1: 'rgba(67,160,71,0.15)',
-        orb2: 'rgba(46,125,50,0.12)',
+        orb1: 'rgba(255, 255, 255, 0.1)',
+        orb2: 'rgba(255, 255, 255, 0.08)',
       };
     };
 
@@ -234,7 +214,7 @@ const Header = () => {
               width: 40, height: 40, borderRadius: '12px',
               background: getGradient(),
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 4px 14px rgba(46,125,50,0.45)',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
               transition: 'all 0.3s ease',
               flexShrink: 0,
               '&:hover': { transform: 'scale(1.08) rotate(-5deg)' },
@@ -268,7 +248,7 @@ const Header = () => {
               width: 40, height: 40, borderRadius: '12px',
               background: getGradient(),
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 4px 14px rgba(46,125,50,0.45)',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               '&:hover': { transform: 'scale(1.08) rotate(-5deg)' },
@@ -315,25 +295,14 @@ const Header = () => {
           
           // Dynamic colors based on user role
           const getActiveColors = () => {
-            if (userRole === 'admin') {
-              return {
-                bg: 'rgba(96, 165, 250, 0.25)',
-                border: 'rgba(96, 165, 250, 0.4)',
-                shadow: '0 8px 16px rgba(0,0,0,0.2), inset 0 0 10px rgba(96, 165, 250, 0.1)',
-                pill: 'rgba(96, 165, 250, 0.15)',
-                accent: '#93C5FD',
-                iconColor: '#BFDBFE',
-                glow: 'rgba(147, 197, 253, 0.6)',
-              };
-            }
             return {
-              bg: 'rgba(67, 160, 71, 0.25)',
-              border: 'rgba(67, 160, 71, 0.4)',
-              shadow: '0 8px 16px rgba(0,0,0,0.2), inset 0 0 10px rgba(67, 160, 71, 0.1)',
-              pill: 'rgba(67, 160, 71, 0.15)',
-              accent: '#81C784',
-              iconColor: '#A5D6A7',
-              glow: 'rgba(129,199,132,0.6)',
+              bg: 'rgba(255, 255, 255, 0.15)',
+              border: 'rgba(255, 255, 255, 0.3)',
+              shadow: '0 8px 16px rgba(0,0,0,0.3), inset 0 0 10px rgba(255, 255, 255, 0.1)',
+              pill: 'rgba(255, 255, 255, 0.1)',
+              accent: '#FFFFFF',
+              iconColor: '#FFFFFF',
+              glow: 'rgba(255, 255, 255, 0.6)',
             };
           };
           
@@ -367,7 +336,7 @@ const Header = () => {
                   py: 1.4,
                   background: active 
                     ? colors.bg
-                    : (hoveredItem === item.path ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
+                    : (hoveredItem === item.path ? 'rgba(255, 255, 255, 0.12)' : 'transparent'),
                   backdropFilter: active ? 'blur(10px)' : 'none',
                   border: active ? `1px solid ${colors.border}` : '1px solid transparent',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -399,11 +368,12 @@ const Header = () => {
                   />
                 )}
                 <Box sx={{
-                  color: active ? colors.iconColor : 'rgba(255,255,255,0.6)',
+                  color: active ? '#FFFFFF' : '#FFFFFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.3s ease',
                   transform: (hoveredItem === item.path || active) ? 'scale(1.1)' : 'scale(1)',
                   filter: active ? `drop-shadow(0 0 8px ${colors.glow})` : 'none',
+                  opacity: active ? 1 : 0.8,
                   '& .MuiSvgIcon-root': { fontSize: 24 },
                 }}>
                   {item.icon}
@@ -411,11 +381,12 @@ const Header = () => {
                 {(!collapsed || isMobile) && (
                   <Typography sx={{
                     fontSize: '0.95rem',
-                    fontWeight: active ? 700 : 500,
-                    color: active ? '#FFFFFF' : 'rgba(255,255,255,0.7)',
+                    fontWeight: active ? 700 : 600,
+                    color: active ? '#FFFFFF' : '#FFFFFF',
                     transition: 'all 0.3s ease',
                     whiteSpace: 'nowrap',
                     letterSpacing: active ? '0.01em' : '0',
+                    opacity: active ? 1 : 0.9,
                   }}>
                     {item.label}
                   </Typography>
@@ -461,8 +432,8 @@ const Header = () => {
               border: '1px solid rgba(255,255,255,0.08)',
               transition: 'all 0.2s ease',
               '&:hover': {
-                background: 'rgba(67,160,71,0.15)',
-                border: '1px solid rgba(67,160,71,0.3)',
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.3)',
               },
             }}
           >
@@ -470,7 +441,7 @@ const Header = () => {
               width: 36, height: 36,
               background: getGradient(),
               fontSize: '0.95rem', fontWeight: 700,
-              boxShadow: '0 4px 12px rgba(46,125,50,0.35)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
               border: '2px solid rgba(255,255,255,0.15)',
               flexShrink: 0,
             }}>
@@ -497,19 +468,15 @@ const Header = () => {
             PaperProps={{
               sx: {
                 borderRadius: 3, minWidth: 220,
-                background: userRole === 'admin'
-                  ? 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)'
-                  : 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-                border: userRole === 'admin'
-                  ? '1px solid rgba(96, 165, 250, 0.2)'
-                  : '1px solid rgba(67,160,71,0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 color: 'white',
                 overflow: 'hidden',
               }
             }}
           >
-            <Box sx={{ px: 2.5, py: 2, background: userRole === 'admin' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(67,160,71,0.1)' }}>
+            <Box sx={{ px: 2.5, py: 2, background: 'rgba(255, 255, 255, 0.1)' }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'white' }}>
                 {user.email?.split('@')[0]}
               </Typography>
@@ -529,12 +496,12 @@ const Header = () => {
                 sx={{
                   py: 1.5, px: 2.5, gap: 1.5, color: 'rgba(255,255,255,0.85)',
                   '&:hover': { 
-                    background: userRole === 'admin' ? 'rgba(96, 165, 250, 0.2)' : 'rgba(67,160,71,0.2)', 
+                    background: 'rgba(255, 255, 255, 0.2)', 
                     color: 'white' 
                   },
                 }}
               >
-                <Box sx={{ color: userRole === 'admin' ? '#93C5FD' : '#81C784' }}>{item.icon}</Box>
+                <Box sx={{ color: '#FFFFFF' }}>{item.icon}</Box>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.label}</Typography>
               </MenuItem>
             ))}
@@ -575,8 +542,8 @@ const Header = () => {
             sx={{
               borderRadius: 2, py: 1.2, fontWeight: 700,
               background: getGradient(),
-              boxShadow: '0 4px 14px rgba(46,125,50,0.4)',
-              '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 20px rgba(46,125,50,0.5)' },
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 6px 20px rgba(0,0,0,0.5)' },
             }}
           >
             Get Started
@@ -621,9 +588,7 @@ const Header = () => {
           top: 0, left: 0, right: 0,
           height: 64,
           zIndex: 1200,
-          background: userRole === 'admin' 
-            ? 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)'
-            : 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
+          background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
           backdropFilter: 'blur(20px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
           alignItems: 'center',
@@ -639,7 +604,7 @@ const Header = () => {
             width: 36, height: 36, borderRadius: '10px',
             background: getGradient(),
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(46,125,50,0.4)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
           }}>
             <EventIcon sx={{ fontSize: 20, color: 'white' }} />
           </Box>

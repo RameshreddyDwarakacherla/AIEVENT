@@ -45,43 +45,14 @@ const Layout = ({ children }) => {
 
   // Get background gradient based on user role and current page
   const getBackgroundGradient = () => {
-    if (isAdminPage && userRole === 'admin') {
-      return `
-        linear-gradient(135deg, rgba(135, 206, 250, 0.3) 0%, rgba(173, 216, 230, 0.3) 25%, rgba(176, 224, 230, 0.3) 50%, rgba(135, 206, 250, 0.2) 75%, rgba(173, 216, 230, 0.2) 100%),
-        linear-gradient(45deg, #E0F7FF 0%, #B3E5FC 100%)
-      `;
-    }
-    if (isVendorPage && userRole === 'vendor') {
-      return `
-        linear-gradient(135deg, rgba(22, 101, 52, 0.05) 0%, rgba(34, 197, 94, 0.05) 25%, rgba(74, 222, 128, 0.05) 50%, rgba(134, 239, 172, 0.05) 75%, rgba(187, 247, 208, 0.03) 100%),
-        linear-gradient(45deg, #F0FDF4 0%, #DCFCE7 100%)
-      `;
-    }
-    return `
-      linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 25%, rgba(16, 185, 129, 0.05) 50%, rgba(245, 158, 11, 0.05) 75%, rgba(236, 72, 153, 0.05) 100%),
-      linear-gradient(45deg, #f8fafc 0%, #f1f5f9 100%)
-    `;
+    return 'linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #cbd5e1 100%)';
   };
 
   const getRadialGradients = () => {
-    if (isAdminPage && userRole === 'admin') {
-      return `
-        radial-gradient(circle at 20% 80%, rgba(30, 144, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(65, 105, 225, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(135, 206, 250, 0.12) 0%, transparent 50%)
-      `;
-    }
-    if (isVendorPage && userRole === 'vendor') {
-      return `
-        radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(74, 222, 128, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(134, 239, 172, 0.08) 0%, transparent 50%)
-      `;
-    }
     return `
-      radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.06) 0%, transparent 50%)
+      radial-gradient(circle at 20% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(0, 0, 0, 0.01) 0%, transparent 50%)
     `;
   };
 
