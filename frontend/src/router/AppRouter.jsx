@@ -17,6 +17,7 @@ import FaqPage from '../pages/FaqPage';
 import PrivacyPage from '../pages/PrivacyPage';
 import TermsPage from '../pages/TermsPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import TestGoogleAuth from '../pages/TestGoogleAuth';
 
 // User (Event Organizer) Pages
 import UserDashboard from '../pages/user/UserDashboard';
@@ -118,6 +119,7 @@ const AppRouter = () => {
         <Route path="/login" element={<Layout><LoginPage /></Layout>} />
         <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
         <Route path="/reset-password" element={<Layout><ResetPasswordPage /></Layout>} />
+        <Route path="/test-google" element={<Layout><TestGoogleAuth /></Layout>} />
         <Route path="/events" element={<Layout><EventsPage /></Layout>} />
         <Route path="/vendors" element={<Layout><VendorsPage /></Layout>} />
         <Route path="/vendors/:vendorId" element={<Layout><VendorDetailsPage /></Layout>} />
