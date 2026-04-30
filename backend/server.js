@@ -8,6 +8,19 @@ import { Server } from 'socket.io';
 // Load environment variables
 dotenv.config();
 
+// 🔴 Validate ENV
+if (!process.env.MONGODB_URI) {
+  console.error("❌ MONGODB_URI is missing in environment variables");
+  process.exit(1);
+}
+
+const app = express();
+const httpServer = createServer(app);
+const PORT = process.env.PORT || 5000;
+
+// 🔍 Debug (remove later if needed)
+console.log("ENV CHECK:", process.env.MONGODB_URI ? "Loaded ✅" : "Missing ❌");
+
 // Import routes
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -23,10 +36,6 @@ import notificationRoutes from './routes/notifications.js';
 import adminRoutes from './routes/admin.js';
 import chatbotRoutes from './routes/chatbot.js';
 
-const app = express();
-const httpServer = createServer(app);
-const PORT = process.env.PORT || 5000;
-
 // CORS
 const allowedOrigins = [
   process.env.FRONTEND_URL,
@@ -40,25 +49,21 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
+
+    if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
       return callback(null, true);
     }
-    
-    return callback(null, true); // Allow all origins for now to fix Google OAuth
+
+    return callback(null, true); // allow all (you can restrict later)
   },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  optionsSuccessStatus: 200
+  credentials: true
 }));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Add security headers for Google OAuth
+// Security headers
 app.use((req, res, next) => {
   res.header('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
@@ -66,29 +71,20 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
+
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
+    return res.sendStatus(200);
   }
+
+  next();
 });
 
 // Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost')) {
-        return callback(null, true);
-      }
-      return callback(null, true); // Allow all origins for now
-    },
-    methods: ['GET', 'POST'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  },
-  pingTimeout: 60000,
+    origin: "*",
+    credentials: true
+  }
 });
 
 app.set('io', io);
@@ -96,27 +92,14 @@ app.set('io', io);
 const onlineUsers = new Map();
 
 io.on('connection', (socket) => {
-  console.log(`Socket connected: ${socket.id}`);
+  console.log(`🔌 Socket connected: ${socket.id}`);
 
   socket.on('join', (userId) => {
     if (userId) {
       socket.join(`user_${userId}`);
       onlineUsers.set(userId, socket.id);
       io.emit('user_online', { userId, online: true });
-      console.log(`User ${userId} joined room user_${userId}`);
     }
-  });
-
-  socket.on('typing', ({ conversationId, userId, isTyping }) => {
-    socket.to(`conv_${conversationId}`).emit('typing_status', { userId, isTyping });
-  });
-
-  socket.on('join_conversation', (conversationId) => {
-    socket.join(`conv_${conversationId}`);
-  });
-
-  socket.on('leave_conversation', (conversationId) => {
-    socket.leave(`conv_${conversationId}`);
   });
 
   socket.on('disconnect', () => {
@@ -124,23 +107,24 @@ io.on('connection', (socket) => {
       if (socketId === socket.id) {
         onlineUsers.delete(userId);
         io.emit('user_online', { userId, online: false });
-        console.log(`User ${userId} went offline`);
         break;
       }
     }
-    console.log(`Socket disconnected: ${socket.id}`);
+    console.log(`❌ Socket disconnected: ${socket.id}`);
   });
 });
 
 export { io };
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/aieventplanner')
+// ✅ MongoDB Atlas Connection (FIXED)
+console.log("🔍 Connecting to MongoDB...");
+
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log("✅ Connected to MongoDB Atlas");
   })
   .catch((error) => {
-    console.error('MongoDB connection error:', error);
+    console.error("❌ MongoDB connection error:", error.message);
     process.exit(1);
   });
 
@@ -164,44 +148,26 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
     message: 'AI Event Planner API is running',
-    timestamp: new Date().toISOString(),
-    socketConnections: io.engine.clientsCount,
-    onlineUsers: onlineUsers.size,
     dbStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
   });
 });
 
-// Google OAuth test endpoint
-app.get('/api/auth/google/test', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Google OAuth endpoint is accessible',
-    timestamp: new Date().toISOString(),
-    cors: 'enabled'
-  });
-});
-
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    message: 'Something went wrong',
   });
 });
 
-// 404 handler
+// 404
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 // Start server
 httpServer.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Socket.IO enabled for real-time features`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
-
-export default app;
